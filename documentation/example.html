@@ -1,84 +1,110 @@
 <!-- this is only an example -->
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<style>
-body {
- display: block;
- margin: auto;
- width: 450px;
-}
-p {
- margin: 0;
-}
-.status {
- background-color: black;
- text-align: center;
- color: #eb5e28;
- padding: 10px 0;
-}
-.chatroom {
- background-color: #252422;
- align: center;
- padding: 10px 0;
-}
-.msg {
- background-color: #403d39;
- color: #fffcf2;
- padding: 10px;
- margin: 12px 24px;
- border-radius: 8px;
- box-shadow: 0 0 8px 6px #000;
-}
-.msg .user {
- margin: 0;
- color: #eb5e28;
- float: left;
-}
-.msg .time {
- margin: 0;
- color: #ccc5b9;
- float: right;
-}
-.msg .txt {
- margin: 1.6em 0 0 0;
- color: #fffcf2;
-}
-.send {
- background-color: black;
- padding: 12px;
-}
-.send input {
- color: white;
- background-color: #403d39;
- border: 2px solid #eb5e28;
- width: 320px;
- height: 36px;
- border-radius: 8px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger App</title>
+    <style>
+        body {
+            background-color: black;
+            display: block;
+            margin: auto;
+            width: auto;
+            height: auto;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .status {
+            background-color: black;
+            text-align: center;
+            color: #eb5e28;
+            padding: 10px 0;
+        }
+
+        .chatroom {
+            background-color: #252422;
+            text-align: left;
+            padding: 10px 0;
+        }
+
+        .msg {
+            background-color: #403d39;
+            color: #fffcf2;
+            padding: 10px;
+            margin: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px 6px #000;
+        }
+
+        .msg .user {
+            margin: 0;
+            color: #eb5e28;
+            float: left;
+        }
+
+        .msg .time {
+            margin: 0;
+            color: #ccc5b9;
+            float: right;
+        }
+
+        .msg .txt {
+            margin: 1.6em 0 0 0;
+            color: #fffcf2;
+        }
+
+        .send {
+            display:flex;
+            align-items:flex-end;
+            background-color: black;
+            padding: 12px;
+        }
+
+        .send input {
+            align-items: stretch;
+            color: white;
+            background-color: #403d39;
+            border: 2px solid #eb5e28;
+            width: 320px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .send button {
+            display:flex;
+            align-items:center;
+        }
+
+    </style>
 </head>
 <body>
-<div class="status"><p>Connected</p></div>
-<div class="chatroom">
-<div class="msg">
- <p class="user">yolo_24</p>
- <p class="time">12:23</p>
- <p class="txt">hey! check this example layout that I created.</p>
-</div>
-<div class="msg">
- <p class="user">mark</p>
- <p class="time">12:25</p>
- <p class="txt">This css sucks. You seriously need to work on your css skill</p>
-</div>
-<div class="msg">
- <p class="user">yolo_24</p>
- <p class="time">12:25</p>
- <p class="txt">:( <br> well that hurt </p>
-</div>
-</div>
-<div class="send">
- <input type="txt"></input>
- <button type="submit">send</button>
-</div>
+    <div class="status">
+        <p>Connected</p>
+    </div>
+    <div class="chatroom">
+        <div class="msg">
+            <p class="user">yolo_24</p>
+            <p class="time">12:23</p>
+            <p class="txt">hey! check this example layout that I created.</p>
+        </div>
+        <div class="msg">
+            <p class="user">mark</p>
+            <p class="time">12:25</p>
+            <p class="txt">This css sucks. You seriously need to work on your css skill</p>
+        </div>
+        <div class="msg">
+            <p class="user">yolo_24</p>
+            <p class="time">12:25</p>
+            <p class="txt">:( <br/> well that hurt </p>
+        </div>
+    </div>
+    <div class="send">
+        <input type="txt"></input>
+        <button type="submit">send</button>
+    </div>
 </body>
 </html>
