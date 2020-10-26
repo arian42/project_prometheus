@@ -1,0 +1,28 @@
+this api is simple, stupid and useless it will change entirely
+the only use of this is to start programming and have something to play with
+
+----------------------
+to get chat data
+
+GET /api/chat
+DATA: null
+
+RESPONSE: json (status: 200)
+EXAMPLE:
+[
+ {"user": "alex", "msg": "hello world", "time": "12:00"},
+ {"user": "alex", "msg": "hello??", "time": "12:02"},
+ {"user": "user2", "msg": "hi", "time": "12:03"},
+]
+----------------------
+to send data
+
+POST /api/chat
+DATA: json
+Example: 
+{"user": "alex", "msg": "hello??"}
+
+RESPONSE: null (status: 200)
+
+
+
