@@ -1,37 +1,55 @@
+import { useState } from "react";
 import "./messenger.styles.scss";
 
-const Messenger = () => (
-    <div className="messenger">
-        <div className="status">
-            <p>Connected</p>
+const Messenger = () => {
+    
+    const[messages] = useState([
+            [
+                <span>yolo_24</span>,
+                <span>12:23</span>,
+                <span>hey! check this example layout that I created.</span>
+            ],
+            [
+                <span>mark</span>,
+                <span>12:25</span>,
+                <span>This css sucks. You seriously need to work on your css skill</span>
+            ],
+            [
+                <span>yolo_24</span>,
+                <span>12:25</span>,
+                <span>&#128542;&#128542;&#128542;<br/> well that hurt</span>
+            ],
+            [
+                <span>mark</span>,
+                <span>12:26</span>,
+                <span>Don't forget to salt your pasta before boiling it</span>
+            ],
+        ]);
+    
+    console.log(messages);
+
+    return(
+        <div className="messenger">
+            <div className="status">
+                <p>Connected</p>
+            </div>
+            <div className="chatroom">
+                {messages
+                    .map((a,index) => (
+                        <div className="msg" key={index}>
+                            <p className="user">{a[0]}</p>
+                            <p className="time">{a[1]}</p>
+                            <p className="txt">{a[2]}</p>
+                        </div>
+                    ))}
+            </div> 
+
+            <div className="send">
+                <input type="txt"></input>
+                <button type="submit">send</button>
+            </div>
         </div>
-        <div className="chatroom">
-            <div className="msg">
-                <p className="user">yolo_24</p>
-                <p className="time">12:23</p>
-                <p className="txt">hey! check this example layout that I created.</p>
-            </div>
-            <div className="msg">
-                <p className="user">mark</p>
-                <p className="time">12:25</p>
-                <p className="txt">This css sucks. You seriously need to work on your css skill</p>
-            </div>
-            <div className="msg">
-                <p className="user">yolo_24</p>
-                <p className="time">12:25</p>
-                <p className="txt">:( <br/> well that hurt </p>
-            </div>
-            <div className="msg">
-                <p className="user">mark</p>
-                <p className="time">12:26</p>
-                <p className="txt">Don't forget to salt your pasta before boiling it</p>
-            </div>
-        </div>
-        <div className="send">
-            <input type="txt"></input>
-            <button type="submit">send</button>
-        </div>
-    </div>
-);
+    );
+};
 
 export default Messenger;
