@@ -1,3 +1,6 @@
 # Visual Studio Code #
 .vscode/
 .history
+
+# temp data for testing...
+backend/data.txt
