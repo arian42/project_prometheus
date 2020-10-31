@@ -4,3 +4,6 @@
 
 # temp data for testing...
 backend/data.txt
+
+#virtualenv
+backend/env

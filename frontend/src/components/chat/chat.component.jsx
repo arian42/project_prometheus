@@ -1,8 +1,9 @@
 import { useState } from "react";
-import "./messenger.styles.scss";
+import "./chat.styles.scss";
 
-const Messenger = () => {
+const Chat = () => {
     
+    //database mock
     const[messages, setMessages] = useState([
         [
             <span>yolo_24</span>,
@@ -34,6 +35,10 @@ const Messenger = () => {
 
     const sendMessage = async event => {
         event.preventDefault();
+
+        if (message === "" ) {
+            return;
+        }
 
         setMessages([
             ...messages,
@@ -70,6 +75,7 @@ const Messenger = () => {
                     onChange={handleChange}
                     value={message}
                     placeholder="write your message"
+                    label="message"
                 ></input>
                 <button type="submit">send</button>
             </form>
@@ -77,4 +83,4 @@ const Messenger = () => {
     );
 };
 
-export default Messenger;
+export default Chat;

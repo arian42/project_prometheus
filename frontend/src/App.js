@@ -1,12 +1,32 @@
+import {
+  Switch,
+  Route,
+  Redirect,
+  //Link,
+} from "react-router-dom";
+
+
+import Messenger from './pages/messenger/messenger.component';
+import SignInAndSignUp from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+//import Spinner from './components/spinner/spinner.component';
+
 import './App.css';
-import Messenger from './components/messenger/messenger.component';
-import Spinner from './components/spinner/spinner.component';
+
+let currentUser = "hello";
 
 function App() {
   return (
     <div className="App">
-      <Spinner/>
-      <Messenger/>
+      <Switch>
+        <Route exact path='/messenger' component={Messenger} />
+        <Route
+              exact
+              path='/'
+              render={() =>
+                currentUser ? <Redirect to='/messenger' /> : <SignInAndSignUp />
+              }
+            />
+      </Switch>
     </div>
   );
 }
