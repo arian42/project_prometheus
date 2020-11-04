@@ -1,33 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./chat.styles.scss";
 
-const Chat = () => {
-    
-    //database mock
-    const[messages, setMessages] = useState([
-        [
-            <span>yolo_24</span>,
-            <span>12:23</span>,
-            <span>hey! check this example layout that I created.</span>
-        ],
-        [
-            <span>mark</span>,
-            <span>12:25</span>,
-            <span>This css sucks. You seriously need to work on your css skill</span>
-        ],
-        [
-            <span>yolo_24</span>,
-            <span>12:25</span>,
-            <span>&#128542;&#128542;&#128542;<br/> well that hurt</span>
-        ],
-        [
-            <span>mark</span>,
-            <span>12:26</span>,
-            <span>Don't forget to salt your pasta before boiling it</span>
-        ],
-    ]);
+let date = new Date();
 
+const Chat = () => {
+    const [render,rerender] = useState({});
     const [message, setMessage] = useState("");
+    const[chat, setChat] = useState([]);
+
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         rerender({});
+    //     }, 5000);
+
+    //     return clearInterval(intervalId);
+    // }, [render]);
+
+    useEffect(() => {
+
+        let fetchingChat = async () => {
+            let fetchedChat = await fetch("http://127.0.0.1:5000/api/chat");
+            let stringedChat = await fetchedChat.json();
+            let listedChat = await stringedChat.map((a) => ([
+                <span>{a.user}</span>,
+                <span>{a.time}</span>,
+                <span>{a.msg}</span>,
+            ]));
+
+            setChat([...listedChat]);
+        };
+
+        fetchingChat();
+
+        const intervalId = setInterval(() => {
+            fetchingChat();
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+
+    }, [render]);
 
     const handleChange = event => {
         setMessage(event.target.value);
@@ -40,16 +51,19 @@ const Chat = () => {
             return;
         }
 
-        setMessages([
-            ...messages,
-            [
-                <span>mark</span>,
-                <span>don't have any yet</span>,
-                <span>{message}</span>
-            ]
-        ]);
+        let messageJSON = {
+            "user" : "mark",
+            "msg": `${message}`,
+            "time": `${date.getHours() + ":" + date.getMinutes + "" + date.getSeconds()}`,
+        }
+        
+        fetch("http://127.0.0.1:5000/api/chat",{
+            method: 'post',
+            body: JSON.stringify(messageJSON)
+        })
 
         setMessage("");
+        rerender({});
     }
 
     return(
@@ -58,7 +72,7 @@ const Chat = () => {
                 <p>Connected</p>
             </div>
             <div className="chatroom">
-                {messages
+                {chat
                     .map((a,index) => (
                         <div className="msg" key={index}>
                             <p className="user">{a[0]}</p>

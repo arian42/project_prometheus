@@ -3,18 +3,22 @@ import datetime
 import json
 import flask
 from flask import request, jsonify
+from flask_cors import CORS
 
 
 app = flask.Flask(__name__)
+CORS(app)
 app.config["DEBUG"] = True
 
-data = None
+data = []
+
+print(data)
+
 data_file = open('data.txt', 'a')
 
 # load the chat file
 with open('data.txt', 'r+') as f:
     data = json.loads( '[' + f.read()[:-1] + ']')
-
 
 @app.route('/api/chat', methods=['GET', 'POST'])
 def login():
