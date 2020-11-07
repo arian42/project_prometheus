@@ -4,7 +4,7 @@
 
 ### Linux
 
-serach for you distero your package manager 
+serach for you distero your package manager
 install both Python and Pip
 on Ubuntu:
 
@@ -20,7 +20,7 @@ go to [Python website] (https://www.python.org/) download and install
 
 ## Install Virtualenv
 
-### Linux 
+### Linux
 
 you can install it with package manager or pip
 
@@ -47,7 +47,7 @@ you need this step every time you want to run the server
 
 Flask is a webserver
 
-    pip install flask
+    pip install flask pyjwt
 
 ## Finally
 
@@ -55,6 +55,3 @@ now you can run the server
 go to backend then run the server.py with python
 
     python ./server.py
-
-
-

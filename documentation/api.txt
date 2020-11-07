@@ -25,4 +25,23 @@ Example:
 RESPONSE: null (status: 200)
 
 
+>>>>>>>>>>>>>>>>
+post /api/signup
+{
+    "phone": "xxxxxxxxxx"
+}
+responce data: json
+{
+    "phone-token": "yyyyyyyyyyyyyyy"
+}
 
+>>>>>>>>>>>>>>>
+post /api/login
+{
+    "phone-token": "yyyyyyyyyyyyyyy",
+    "otp": "123456"
+}
+responce data: json
+{
+    "token": "zzzzzzzzzzzzzzzzz"
+}

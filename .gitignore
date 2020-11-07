@@ -3,7 +3,8 @@
 .history
 
 # temp data for testing...
-backend/data.txt
+backend/chat.pickle
+backend/users.pickle
 
 #virtualenv
 backend/env
