@@ -110,7 +110,7 @@ def token_required(func):
 
 
 @app.route('/api/login', methods=['POST'])
->>>>>>> 034b725e2f7105aa8a919ea2b0ccbb681ddeb494
+
 def login():
     data = request.get_json(force=True)
 
