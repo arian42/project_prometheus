@@ -28,20 +28,26 @@ RESPONSE: null (status: 200)
 >>>>>>>>>>>>>>>>
 post /api/signup
 {
-    "phone": "xxxxxxxxxx"
+    "phone": "xxxxxxxxxx",
+    "name": "naaaaaaaaaaammmmmmmeeeee"
 }
 responce data: json
 {
-    "phone-token": "yyyyyyyyyyyyyyy"
+    "phone-token": "yyyyyyyyyyyyyyy",
+    "name": "naaaaaaaaaaammmmmmmeeeee"
 }
 
 >>>>>>>>>>>>>>>
 post /api/login
+{
+    "phone": "euoqahlcsukhnoiac"
+}
 {
     "phone-token": "yyyyyyyyyyyyyyy",
     "otp": "123456"
 }
 responce data: json
 {
-    "token": "zzzzzzzzzzzzzzzzz"
+    "token": "zzzzzzzzzzzzzzzzz",
+    "name": "naaaaaaaaaaammmmmmmeeeee"
 }

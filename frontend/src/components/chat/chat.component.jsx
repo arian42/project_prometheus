@@ -8,14 +8,6 @@ const Chat = () => {
     const [message, setMessage] = useState("");
     const[chat, setChat] = useState([]);
 
-    // useEffect(() => {
-    //     const intervalId = setInterval(() => {
-    //         rerender({});
-    //     }, 5000);
-
-    //     return clearInterval(intervalId);
-    // }, [render]);
-
     useEffect(() => {
 
         let fetchingChat = async () => {
