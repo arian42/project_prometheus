@@ -15,6 +15,7 @@ CORS(app)
 app.config['SECRET_KEY'] = 'not-that-secret'
 app.config["DEBUG"] = True
 
+
 class data:
     def __init__(self):
         for file_name in ("users.pickle", "chat.pickle"):
@@ -110,7 +111,6 @@ def token_required(func):
 
 
 @app.route('/api/login', methods=['POST'])
-
 def login():
     data = request.get_json(force=True)
 
@@ -123,7 +123,7 @@ def login():
         return make_response(jsonify({'error': 'Invalid token.'}), 401)
 
     if not rtoken['phone'] in db.users_by_phone:
-        uid = db.add_user(rtoken['phone'], 'test')
+        uid = db.add_user(rtoken['phone'], rtoken['name'])
     else:
         uid = db.users_by_phone[rtoken['phone']]
 
@@ -134,7 +134,7 @@ def login():
             'exp': datetime.utcnow() + timedelta(hours=48)
         }, app.config['SECRET_KEY'])
 
-        return make_response(jsonify({'token': token.decode('UTF-8')}), 200)
+        return make_response(jsonify({'token': token.decode('UTF-8'), 'name': rtoken['name'], 'user_id': uid}), 200)
 
     return make_response(jsonify({'error': 'Invalid code'}), 401)
 
@@ -153,10 +153,11 @@ def signup():
     # generate token
     token = jwt.encode({
         'phone': data.get('phone'),
+        'name': data.get('name', ''),
         'exp': datetime.utcnow() + timedelta(minutes=2)
     }, app.config['SECRET_KEY'])
 
-    return make_response(jsonify({'phone-token': token.decode('UTF-8')}), 200)
+    return make_response(jsonify({'phone-token': token.decode('UTF-8'), 'name': data.get('name')}), 200)
 
 
 @app.route('/api/chat', methods=['GET', 'POST'])
