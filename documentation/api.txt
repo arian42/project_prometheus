@@ -42,12 +42,42 @@ post /api/login
 {
     "phone": "euoqahlcsukhnoiac"
 }
+
 {
     "phone-token": "yyyyyyyyyyyyyyy",
     "otp": "123456"
 }
+
 responce data: json
 {
     "token": "zzzzzzzzzzzzzzzzz",
     "name": "naaaaaaaaaaammmmmmmeeeee"
 }
+
+
+
+
+sign-in :
+
+    front {
+        "phone"
+    }
+
+    back {
+        "phone-token"
+    }
+    and send sms
+
+    front {
+        "phone-token""
+        "otp"
+    }
+
+    back {
+        "token"
+        "name"
+    }
+
+sign-up :
+
+    only difference is you send name too in the first frontend request

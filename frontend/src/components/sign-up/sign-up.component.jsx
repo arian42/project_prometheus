@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux'
+import { signUp, getTokenConfirm } from '../../redux/user/userReducer';
 
 const SignIn = () => {
+
+    const dispatch = useDispatch();
+
     const [userCredentials, setCredentials] = useState({
         name: '',
         phone: '',
@@ -11,17 +16,9 @@ const SignIn = () => {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        fetch("http://127.0.0.1:5000/api/signup",{
-            method: 'post',
-            body: JSON.stringify({
-                'phone': `${phone}`,
-                'name': `${name}`,
-            })
-        })
-        .then(fetchedJson => fetchedJson.json())
-        .then(fetchedData => fetchedData)
-        .catch(error => console.log(error));
-    };
+        await dispatch(signUp({name, phone}));
+        await dispatch(getTokenConfirm());
+    }
     
     const handleChange = event => {
         const { value, name } = event.target;
@@ -29,20 +26,19 @@ const SignIn = () => {
         setCredentials({ ...userCredentials, [name]: value });
     };
 
-
     return (
         <div>
             <p className="title">Don't have an account, why not make one ? </p>
             <span>Sign up with your name and phone number</span>
             <form onSubmit={handleSubmit}>
                 <input
-                        name='name'
-                        type='name'
-                        onChange={handleChange}
-                        placeholder='Name'
-                        value={name}
-                        label='name'
-                        required
+                    name='name'
+                    type='name'
+                    onChange={handleChange}
+                    placeholder='Name'
+                    value={name}
+                    label='name'
+                    required
                 />
                 <input
                     name='phone'
@@ -56,7 +52,7 @@ const SignIn = () => {
                 <button type='submit'> Sign up </button>
             </form>
         </div>
-    )
-}
+    );
+};
 
 export default SignIn;

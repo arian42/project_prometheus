@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux'
+import { useHistory } from "react-router-dom";
 import "./chat.styles.scss";
 
 let date = new Date();
@@ -7,11 +9,24 @@ const Chat = () => {
     const [render,rerender] = useState({});
     const [message, setMessage] = useState("");
     const[chat, setChat] = useState([]);
+    const token = useSelector( state => state.user.token );
+
+    let history = useHistory();
 
     useEffect(() => {
-
+        
         let fetchingChat = async () => {
-            let fetchedChat = await fetch("http://127.0.0.1:5000/api/chat");
+
+            if (!token) {
+                history.push('/someRoute');
+                return;
+            }
+
+            let fetchedChat = await fetch("http://127.0.0.1:5000/api/chat", {
+                headers: {
+                    'x-access-token': `${token}`
+                },
+            });
             let stringedChat = await fetchedChat.json();
             let listedChat = await stringedChat.map((a) => ([
                 <span>{a.user}</span>,
@@ -30,7 +45,7 @@ const Chat = () => {
 
         return () => clearInterval(intervalId);
 
-    }, [render]);
+    }, [render, token, history]);
 
     const handleChange = event => {
         setMessage(event.target.value);
@@ -50,6 +65,9 @@ const Chat = () => {
         }
         
         fetch("http://127.0.0.1:5000/api/chat",{
+            headers: {
+                'x-access-token': `${token}`
+            },
             method: 'post',
             body: JSON.stringify(messageJSON)
         })

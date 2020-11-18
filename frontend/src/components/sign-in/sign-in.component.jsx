@@ -14,7 +14,7 @@ const SignIn = () => {
             let phoneTokenJson = await fetch("http://127.0.0.1:5000/api/login",{
                 method: 'post',
                 body: JSON.stringify({
-                    "phone-token": "yyyyyyyyyyyyyyy",
+                    "phone": `${phone}`,
                 })
             });
     
@@ -31,7 +31,7 @@ const SignIn = () => {
                 })
             })
     
-            let tokenAndName = await tokenAndNameJson.json();
+            //let tokenAndName = await tokenAndNameJson.json();
 
         }catch(error){
             console.log(error);
@@ -62,7 +62,7 @@ const SignIn = () => {
                 <button type='submit'> Sign in</button>
             </form>
         </div>
-    )
-}
+    );
+};
 
 export default SignIn;
