@@ -3,11 +3,12 @@ import {
     createAsyncThunk,
 } from '@reduxjs/toolkit';
 
-export const signUp = createAsyncThunk('user/signUp', async ({username, email, password }) => {
+export const signUp = createAsyncThunk('user/signUp', async ({name, username, email, password }) => {
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/signup",{
+    const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-up",{
         method: 'post',
         body: JSON.stringify({
+            'name': `${name}`,
             'username': `${username}`,
             'email': `${email}`,
             'password': `${password}`
@@ -21,7 +22,7 @@ export const signUp = createAsyncThunk('user/signUp', async ({username, email, p
 
 export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, password}) => {
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/login",{
+    const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-in",{
         method: 'post',
         body: JSON.stringify({
             'usernameOrEmail': `${usernameOrEmail}`,
@@ -34,43 +35,31 @@ export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, p
     return fetchedData;
 });
 
-
-export const getTokenConfirm = createAsyncThunk('user/getTokenConfirm', async ( _ ,{getState}) => {
-
-    const phoneToken = getState().user.phoneToken;
-    const otp = getState().user.otp;
-
-    console.log(phoneToken);
-    console.log(otp);
-
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/login",{
-        method: 'post',
+export const profile = createAsyncThunk('user/profile', async ({username, token}, a) => {
+    const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-up",{
+        method: 'GET',
         body: JSON.stringify({
-            'phone-token': `${phoneToken}`,
-            'otp': `${otp}`,
+            'username': `${username}`,
+            'token': `${token}`,
         })
     });
 
-    const fetchedData = await fetchedJson.json();
+    console.log(a);
 
-    console.log(fetchedData);
-
-    if (fetchedData.error) {
-        // eslint-disable-next-line no-throw-literal
-        throw "error";
-    }
-
-    return fetchedData;
 });
+
+
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        phoneToken: null,
-        otp: "123456",
         token: null,
-        name: null,
-        userId: null,
+        profile: {
+            name: null,
+            username: null,
+            email: null,
+            avatar: null,
+        },
         status: 'idle',
         error: null,
     },
@@ -88,8 +77,8 @@ const userSlice = createSlice({
         },
         [signUp.fulfilled]: (state, action) => {
             state.status = 'succeeded';
-            state.name = action.payload.name;
-            state.phoneToken = action.payload["phone-token"];
+            state.profile.username = action.payload.username;
+            state.token = action.payload.token;
         },
         [signUp.rejected]: (state, action) => {
             state.status = 'failed';
@@ -100,26 +89,24 @@ const userSlice = createSlice({
         },
         [signIn.fulfilled]: (state, action) => {
             state.status = 'succeeded';
-            state.name = action.payload.name;
+            state.profile.username = action.payload.username;
             state.token = action.payload.token;
         },
         [signIn.rejected]: (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
         },
-        [getTokenConfirm.pending]: (state, _action) => {
-            state.status = 'loading'
-        },
-        [getTokenConfirm.fulfilled]: (state, action) => {
-            state.status = 'succeeded';
-            state.name = action.payload.name;
-            state.token = action.payload.userId;
-            state.token = action.payload.token;
-        },
-        [getTokenConfirm.rejected]: (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        },
+        // [profile.pending]: (state, _action) => {
+        //     state.status = 'loading'
+        // },
+        // [profile.fulfilled]: (state, action) => {
+        //     state.status = 'succeeded';
+        //     state.profile = action.payload;
+        // },
+        // [profile.rejected]: (state, action) => {
+        //     state.status = 'failed';
+        //     state.error = action.error.message;
+        // },
     }
 });
 

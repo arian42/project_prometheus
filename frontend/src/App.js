@@ -16,7 +16,7 @@ import './App.css';
 
 function App() {
 
-  const currentUser = useSelector(state => state.user.name);
+  const currentUser = useSelector(state => state.user.profile);
   const currentToken = useSelector(state => state.user.token);
 
   

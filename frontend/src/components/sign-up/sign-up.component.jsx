@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux'
-import { signUp, getTokenConfirm } from '../../redux/user/userReducer';
+import { signUp } from '../../redux/user/userReducer';
 
 import './sign-up.styles.scss';
 
@@ -20,7 +20,6 @@ const SignIn = () => {
         event.preventDefault();
 
         await dispatch(signUp({username, email, password }));
-        await dispatch(getTokenConfirm());
     }
     
     const handleChange = event => {
@@ -32,7 +31,6 @@ const SignIn = () => {
     return (
         <div className='sign-up'>
             <p className="title">Don't have an account, why not make one? </p>
-            <span>Sign up with your name and phone number</span>
             <form onSubmit={handleSubmit}>
                 <input
                     name='name'
@@ -80,6 +78,7 @@ const SignIn = () => {
                     required
                 /> */}
                 <button type='submit'> Sign up </button>
+                <span>warning: verify your account within 48 hours otherwise your account will be deleted.</span>
             </form>
         </div>
     );
