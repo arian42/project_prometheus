@@ -8,12 +8,18 @@ from random import getrandbits
 import flask
 from flask_cors import CORS
 import pickle  # for data storage
+import re
+from hashlib import md5  # change this for the love of god
+
 
 app = flask.Flask(__name__)
 CORS(app)
 
 app.config['SECRET_KEY'] = 'not-that-secret'
 app.config["DEBUG"] = True
+
+
+EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
 
 class data:
@@ -26,7 +32,7 @@ class data:
         self.chat_records = self._read_data('chat.pickle')
         self._chat_file = open('chat.pickle', 'ab+')
         self.users = pickle.load(open('users.pickle', 'rb'))
-        self.users_by_phone = self._users_by_phone()
+        self.users_by_name = self._users_by_name()
 
     def _read_data(self, file_name):
         recoreds = []
@@ -46,21 +52,22 @@ class data:
         self.chat_records.append(data)
         pickle.dump(data, self._chat_file)
 
-    def _users_by_phone(self):
+    def _users_by_name(self):
         """ this makes user queries eazy and fast. this will run at runtime """
-        phone = {}
+        foo = {}
         for uid, user in self.users.items():
-            phone[user['phone']] = uid
-        return phone
+            foo[user['username']] = uid
+        return foo
 
-    def add_user(self, phone, name):
+    def add_user(self, email, username, name, password):
         while True:
             # this is not safe random but it is ok for this use
             # https://stackoverflow.com/questions/3530294/how-to-generate-unique-64-bits-integers-from-python
             user_id = getrandbits(64)
             if not user_id in self.users:
-                self.users[user_id] = {"name": name, "phone": phone}
-                self.users_by_phone[phone] = user_id
+                self.users[user_id] = {
+                    "username": username, "email": email, "name": name, "password": password}
+                self.users_by_name[username] = user_id
                 break
 
         with open('users.pickle', 'wb') as f:
@@ -110,54 +117,84 @@ def token_required(func):
     return decorated
 
 
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.get_json(force=True)
-
-    if not data or not data.get('phone-token') or not data.get('otp'):
-        return make_response(jsonify({'error': 'Invalid request.'}), 401)
-
-    try:
-        rtoken = jwt.decode(data.get('phone-token'), app.config['SECRET_KEY'])
-    except:
-        return make_response(jsonify({'error': 'Invalid token.'}), 401)
-
-    if not rtoken['phone'] in db.users_by_phone:
-        uid = db.add_user(rtoken['phone'], rtoken['name'])
-    else:
-        uid = db.users_by_phone[rtoken['phone']]
-
-    if data['otp'] == '123456':
-        # generates the JWT Token
-        token = jwt.encode({
-            'id': uid,
-            'exp': datetime.utcnow() + timedelta(hours=48)
-        }, app.config['SECRET_KEY'])
-
-        return make_response(jsonify({'token': token.decode('UTF-8'), 'name': rtoken['name'], 'user_id': uid}), 200)
-
-    return make_response(jsonify({'error': 'Invalid code'}), 401)
-
-
-@app.route('/api/signup', methods=['POST'])
+@app.route('/api/sign-up', methods=['POST'])
 def signup():
     data = request.get_json(force=True)
 
-    if not data.get('phone'):
-        return make_response(jsonify({'error': 'Invalid phone number.'}), 401)
+    for key in ('email', 'password', 'name', 'username'):
+        if not data.get(key):
+            return make_response(jsonify({'error': "{'email', 'password', 'name', 'username'} fields are required."}), 400)
 
-    # validate phone number
-    # send OTP SMS
-    # add OTP to database
+    for _, user in db.users.items():
+        if user['email'] == data['email'].lower():
+            return make_response(jsonify({'error': "Email is taken."}), 400)
+        if user['username'] == data['username'].lower():
+            return make_response(jsonify({'error': "Username is taken."}), 400)
+
+    if len(data['password']) < 8:
+        return make_response(jsonify({'error': "password cant be smaller than 8 chracters"}), 400)
+
+    if not EMAIL_REGEX.match(data['email'].lower()):
+        return make_response(jsonify({'error': "Email is not valid."}), 400)
+
+    user_id = db.add_user(data['email'].lower(),
+                          data['username'].lower(), data['name'], md5(data['password'].encode('utf-8')).hexdigest())
 
     # generate token
     token = jwt.encode({
-        'phone': data.get('phone'),
-        'name': data.get('name', ''),
-        'exp': datetime.utcnow() + timedelta(minutes=2)
+        'id': user_id,
+        'exp': datetime.utcnow() + timedelta(hours=24)
     }, app.config['SECRET_KEY'])
 
-    return make_response(jsonify({'phone-token': token.decode('UTF-8'), 'name': data.get('name')}), 200)
+    return make_response(jsonify({'token': token.decode('UTF-8'), 'name': data.get('name')}), 200)
+
+
+@app.route('/api/sign-in', methods=['POST'])
+def login():
+    data = request.get_json(force=True)
+
+    if data.get("usernameOrEmail") and data.get("password"):
+        username = data["usernameOrEmail"].lower()
+        for uid, user in db.users.items():
+            print(user)
+            if user['username'] == username or user['email'] == username:
+                print(2)
+                if user['password'] == md5(data['password'].encode('utf-8')).hexdigest():
+                    token = jwt.encode({
+                        'id': uid,
+                        'exp': datetime.utcnow() + timedelta(hours=24)
+                    }, app.config['SECRET_KEY'])
+                    print(token)
+                    return make_response(jsonify({'token': token.decode('utf-8'), "username": user['username']}), 200)
+        return make_response(jsonify({'error': "username or password is not corect."}), 400)
+    else:
+        return make_response(jsonify({'error': "password and username is required."}), 400)
+
+
+@app.route('/api/profile', methods=['GET', 'POST'])
+@token_required
+def profile(*argv, **kwargs):
+    data = request.get_json(force=True)
+    if data.get('username'):
+        for uid, user in db.users.items():
+            if user['username'] == data['username'].lower():
+                target = {
+                    'name': db.users[uid]['name'],
+                    'username': db.users[uid]['username'],
+                    'avatar': "#"
+                }
+                break
+        else:
+            return make_response(jsonify({'error': "user not found."}), 400)
+    else:
+        # this is not working
+        target = {
+            'name': db.users[user_id]['name'],
+            'username': db.users[user_id]['username'],
+            'avatar': "#"
+
+        }
+    return make_response(jsonify(target), 200)
 
 
 @app.route('/api/chat', methods=['GET', 'POST'])
