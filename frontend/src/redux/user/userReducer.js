@@ -3,13 +3,14 @@ import {
     createAsyncThunk,
 } from '@reduxjs/toolkit';
 
-export const signUp = createAsyncThunk('user/signUp', async ({name, phone}) => {
+export const signUp = createAsyncThunk('user/signUp', async ({username, email, password }) => {
 
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/signup",{
         method: 'post',
         body: JSON.stringify({
-            'phone': `${phone}`,
-            'name': `${name}`,
+            'username': `${username}`,
+            'email': `${email}`,
+            'password': `${password}`
         })
     });
 
@@ -18,12 +19,13 @@ export const signUp = createAsyncThunk('user/signUp', async ({name, phone}) => {
     return fetchedData;   
 });
 
-export const signIn = createAsyncThunk('user/signIn', async (phone) => {
+export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, password}) => {
 
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/login",{
         method: 'post',
         body: JSON.stringify({
-            'phone': `${phone}`,
+            'usernameOrEmail': `${usernameOrEmail}`,
+            'password': `${password}`,
         })
     });
 

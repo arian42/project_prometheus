@@ -2,21 +2,24 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { signUp, getTokenConfirm } from '../../redux/user/userReducer';
 
+import './sign-up.styles.scss';
+
 const SignIn = () => {
 
     const dispatch = useDispatch();
 
     const [userCredentials, setCredentials] = useState({
-        name: '',
-        phone: '',
+        username: '',
+        email: '',
+        password: '',
     });
 
-    const { name, phone, } = userCredentials;
+    const { name, username, email, password } = userCredentials;
 
     const handleSubmit = async event => {
         event.preventDefault();
 
-        await dispatch(signUp({name, phone}));
+        await dispatch(signUp({username, email, password }));
         await dispatch(getTokenConfirm());
     }
     
@@ -27,8 +30,8 @@ const SignIn = () => {
     };
 
     return (
-        <div>
-            <p className="title">Don't have an account, why not make one ? </p>
+        <div className='sign-up'>
+            <p className="title">Don't have an account, why not make one? </p>
             <span>Sign up with your name and phone number</span>
             <form onSubmit={handleSubmit}>
                 <input
@@ -41,14 +44,41 @@ const SignIn = () => {
                     required
                 />
                 <input
-                    name='phone'
-                    type='tel'
+                    name='username'
+                    type='username'
                     onChange={handleChange}
-                    placeholder='Phone Number'
-                    value={phone}
-                    label='phone'
+                    placeholder='Username'
+                    value={username}
+                    label='username'
                     required
                 />
+                <input
+                    name='email'
+                    type='email'
+                    onChange={handleChange}
+                    placeholder='Email'
+                    value={email}
+                    label='email'
+                    required
+                />
+                <input
+                    name='password'
+                    type='password'
+                    onChange={handleChange}
+                    placeholder='Password'
+                    value={password}
+                    label='password'
+                    required
+                />
+                {/* <input
+                    name='password'
+                    type='password'
+                    onChange={confirmPassword}
+                    placeholder='Password'
+                    value={password}
+                    label='password'
+                    required
+                /> */}
                 <button type='submit'> Sign up </button>
             </form>
         </div>

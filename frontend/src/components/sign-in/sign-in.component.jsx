@@ -1,24 +1,28 @@
 import { useState } from 'react';
 
+import './sign-in.styles.scss';
+
 const SignIn = () => {
     const [userCredentials, setCredentials] = useState({
-        phone: '',
+        usernameOrEmail: '',
+        password: '',
     });
 
-    const { phone } = userCredentials;
+    const { usernameOrEmail, password } = userCredentials;
 
     const handleSubmit = async event => {
         event.preventDefault();
     
         try{
-            let phoneTokenJson = await fetch("http://127.0.0.1:5000/api/login",{
+            let userTokenJson = await fetch("http://127.0.0.1:5000/api/login",{
                 method: 'post',
                 body: JSON.stringify({
-                    "phone": `${phone}`,
+                    "usernameOrEmail": `${usernameOrEmail}`,
+                    "password": `${password}`,
                 })
             });
     
-            let phoneToken = await phoneTokenJson.json();
+            let phoneToken = await userTokenJson.json();
 
             console.log(phoneToken);
             console.log(phoneToken["phone-token"]);
@@ -46,20 +50,29 @@ const SignIn = () => {
 
 
     return (
-        <div>
+        <div className='sign-in'>
             <p className="title">I already have an account</p>
             <span>Sign in with your phone number</span>
             <form onSubmit={handleSubmit}>
                 <input
-                    name='phone'
-                    type='tel'
+                    name='usernameOrEmail'
+                    type='text'
                     onChange={handleChange}
-                    placeholder='Phone Number'
-                    value={phone}
-                    label='phone'
+                    placeholder='Username or Email'
+                    value={usernameOrEmail}
+                    label='username or email'
                     required
                 />
-                <button type='submit'> Sign in</button>
+                <input
+                    name='password'
+                    type='text'
+                    onChange={handleChange}
+                    placeholder='Password'
+                    value={password}
+                    label='password'
+                    required
+                />
+                <button className='button' type='submit'> Sign in</button>
             </form>
         </div>
     );
