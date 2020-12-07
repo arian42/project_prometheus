@@ -44,8 +44,9 @@ class data:
                     break
         return recoreds
 
-    def save_chat(self, message):
+    def save_chat(self, message, username):
         data = {
+            'username': username,
             'msg': message,
             'time': datetime.utcnow().strftime('%H:%M')
         }
@@ -112,7 +113,7 @@ def token_required(func):
                 'error': 'Token is invalid.'
             }), 401)
         # returns the current logged in users contex to the routes
-        return func(user_id, *args, **kwargs)
+        return func(user_id=user_id, *args, **kwargs)
 
     return decorated
 
@@ -173,7 +174,7 @@ def login():
 
 @app.route('/api/profile', methods=['GET', 'POST'])
 @token_required
-def profile(*argv, **kwargs):
+def profile(user_id, *argv, **kwargs):
     data = request.get_json(force=True)
     if data.get('username'):
         for uid, user in db.users.items():
@@ -192,17 +193,16 @@ def profile(*argv, **kwargs):
             'name': db.users[user_id]['name'],
             'username': db.users[user_id]['username'],
             'avatar': "#"
-
         }
     return make_response(jsonify(target), 200)
 
 
 @app.route('/api/chat', methods=['GET', 'POST'])
 @token_required
-def chat(*argv, **kwargs):
+def chat(user_id, *argv, **kwargs):
     if request.method == 'POST':
         d = request.get_json(force=True)
-        db.save_chat(d['msg'])
+        db.save_chat(d.get('msg', "NO data sent."), db.users[user_id]['username'])
         return jsonify(success=True)
     else:
         return make_response(jsonify(db.chat_records), 200)
