@@ -5,10 +5,10 @@ import { signUp } from '../../redux/user/userReducer';
 import './sign-up.styles.scss';
 
 const SignIn = () => {
-
     const dispatch = useDispatch();
 
     const [userCredentials, setCredentials] = useState({
+        name: '',
         username: '',
         email: '',
         password: '',
@@ -19,7 +19,7 @@ const SignIn = () => {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        await dispatch(signUp({username, email, password }));
+        dispatch(signUp({name, username, email, password }));
     }
     
     const handleChange = event => {

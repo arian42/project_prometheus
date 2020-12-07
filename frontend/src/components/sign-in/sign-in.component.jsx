@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import { signIn } from '../../redux/user/userReducer';
+import { useDispatch } from 'react-redux';
 
 import './sign-in.styles.scss';
 
 const SignIn = () => {
+    const dispatch = useDispatch();
+
     const [userCredentials, setCredentials] = useState({
         usernameOrEmail: '',
         password: '',
@@ -13,20 +17,7 @@ const SignIn = () => {
     const handleSubmit = async event => {
         event.preventDefault();
     
-        try{
-            let userTokenJson = await fetch("http://127.0.0.1:5000/api/login",{
-                method: 'post',
-                body: JSON.stringify({
-                    "usernameOrEmail": `${usernameOrEmail}`,
-                    "password": `${password}`,
-                })
-            });
-
-
-
-        }catch(error){
-            console.log(error);
-        }
+        dispatch(signIn({usernameOrEmail, password}));
     };
     
     const handleChange = event => {
@@ -34,7 +25,6 @@ const SignIn = () => {
         
         setCredentials({ ...userCredentials, [name]: value });
     };
-
 
     return (
         <div className='sign-in'>
@@ -51,7 +41,7 @@ const SignIn = () => {
                 />
                 <input
                     name='password'
-                    type='text'
+                    type='password'
                     onChange={handleChange}
                     placeholder='Password'
                     value={password}
