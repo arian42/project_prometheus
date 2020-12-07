@@ -146,7 +146,7 @@ def signup():
         'exp': datetime.utcnow() + timedelta(hours=24)
     }, app.config['SECRET_KEY'])
 
-    return make_response(jsonify({'token': token.decode('UTF-8'), 'name': data.get('name')}), 200)
+    return make_response(jsonify({'token': token.decode('UTF-8'), 'username': data.get('username')}), 200)
 
 
 @app.route('/api/sign-in', methods=['POST'])
