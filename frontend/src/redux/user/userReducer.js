@@ -3,8 +3,25 @@ import {
     createAsyncThunk,
 } from '@reduxjs/toolkit';
 
-export const signUp = createAsyncThunk('user/signUp', async ({name, username, email, password }) => {
 
+const signInSignUpProfile = async ({username,token}) => {
+
+    const profileFetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
+        method: 'POST',
+        body: JSON.stringify({
+            'username': `${username}`,
+            'token': `${token}`,
+        })
+    });
+
+    const profileFetchedData = await profileFetchedJson.json();
+
+    console.log({...profileFetchedData, token});
+
+    return {...profileFetchedData, token};
+}
+
+export const signUp = createAsyncThunk('user/signUp', async ({name, username, email, password }) => {
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-up",{
         method: 'post',
         body: JSON.stringify({
@@ -17,7 +34,7 @@ export const signUp = createAsyncThunk('user/signUp', async ({name, username, em
 
     const fetchedData = await fetchedJson.json();
 
-    return fetchedData;   
+    return signInSignUpProfile(fetchedData);
 });
 
 export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, password}) => {
@@ -32,20 +49,24 @@ export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, p
 
     const fetchedData = await fetchedJson.json();
 
-    return fetchedData;
+    return signInSignUpProfile(fetchedData);
 });
 
-export const profile = createAsyncThunk('user/profile', async ({username, token}, a) => {
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-up",{
-        method: 'GET',
+export const profile = createAsyncThunk('user/profile', async (_, { getState } ) => {
+
+    const {username,token} = getState().user;
+
+    const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
+        method: 'POST',
         body: JSON.stringify({
             'username': `${username}`,
             'token': `${token}`,
         })
     });
 
-    console.log(a);
+    const fetchedData = await fetchedJson.json();
 
+    return fetchedData;
 });
 
 
@@ -57,7 +78,6 @@ const userSlice = createSlice({
         profile: {
             name: null,
             username: null,
-            email: null,
             avatar: null,
         },
         status: 'idle',
@@ -77,7 +97,9 @@ const userSlice = createSlice({
         },
         [signUp.fulfilled]: (state, action) => {
             state.status = 'succeeded';
+            state.profile.name = action.payload.name;
             state.profile.username = action.payload.username;
+            state.profile.avatar = action.payload.avatar;
             state.token = action.payload.token;
         },
         [signUp.rejected]: (state, action) => {
@@ -89,24 +111,26 @@ const userSlice = createSlice({
         },
         [signIn.fulfilled]: (state, action) => {
             state.status = 'succeeded';
+            state.profile.name = action.payload.name;
             state.profile.username = action.payload.username;
+            state.profile.avatar = action.payload.avatar;
             state.token = action.payload.token;
         },
         [signIn.rejected]: (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
         },
-        // [profile.pending]: (state, _action) => {
-        //     state.status = 'loading'
-        // },
-        // [profile.fulfilled]: (state, action) => {
-        //     state.status = 'succeeded';
-        //     state.profile = action.payload;
-        // },
-        // [profile.rejected]: (state, action) => {
-        //     state.status = 'failed';
-        //     state.error = action.error.message;
-        // },
+        [profile.pending]: (state, _action) => {
+            state.status = 'loading'
+        },
+        [profile.fulfilled]: (state, action) => {
+            state.status = 'succeeded';
+            state.profile = action.payload;
+        },
+        [profile.rejected]: (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        },
     }
 });
 
