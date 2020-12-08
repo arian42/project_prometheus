@@ -3,8 +3,8 @@
     background-color: black;
     display: block;
     margin: auto;
-    width: auto;
-    height: auto;
+    width: 100vp;
+    height: 100vp;
 
     p {
         margin: 0;
@@ -52,7 +52,7 @@
     .send {
         display:flex;
         align-items:flex-end;
-        width: 100%;
+        width: 100vp;
         height: 5%;
         background-color: black;
         padding: 12px;
@@ -63,18 +63,27 @@
         color: white;
         background-color: #403d39;
         border: 2px solid #eb5e28;
-        width: 92%;
+        width: 88%;
         height: 36px;
         border-radius: 8px;
+
+        // border: 0;
+        // padding: 10px;
+        // width: 90%;
+        // margin-right: 0.5%;
+
     }
 
     .send button {
         margin: 5px 5px 5px 5px;
         border-radius: 20px;
         border: 5px solid;
-        width: 5%;
         height: 36px;
         align-items:center;
+        width: 12%;
+        border: none;
+        padding: 10px;
+    
     }
 
 }

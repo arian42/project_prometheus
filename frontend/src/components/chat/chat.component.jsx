@@ -3,8 +3,6 @@ import { useSelector } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import "./chat.styles.scss";
 
-let date = new Date();
-
 const Chat = () => {
     const [render,rerender] = useState({});
     const [message, setMessage] = useState("");
@@ -29,10 +27,13 @@ const Chat = () => {
             });
             let stringedChat = await fetchedChat.json();
             let listedChat = await stringedChat.map((a) => ([
-                <span>{a.user}</span>,
+                <span>{a.username}</span>,
                 <span>{a.time}</span>,
                 <span>{a.msg}</span>,
             ]));
+
+            //I don't know why the first message sent from server is empty so I simply shift it
+            listedChat.shift();
 
             setChat([...listedChat]);
         };
@@ -59,9 +60,7 @@ const Chat = () => {
         }
 
         let messageJSON = {
-            "user" : "mark",
             "msg": `${message}`,
-            "time": `${date.getHours() + ":" + date.getMinutes + "" + date.getSeconds()}`,
         }
         
         fetch("http://127.0.0.1:5000/api/chat",{
@@ -91,8 +90,7 @@ const Chat = () => {
                         </div>
                     ))
                 }
-            </div> 
-
+            </div>
             <form className="send" onSubmit={sendMessage}>
                 <input
                     type="txt"

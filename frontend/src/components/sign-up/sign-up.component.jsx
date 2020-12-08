@@ -39,6 +39,7 @@ const SignIn = () => {
                     placeholder='Name'
                     value={name}
                     label='name'
+                    autoComplete="off"
                     required
                 />
                 <input
@@ -48,6 +49,7 @@ const SignIn = () => {
                     placeholder='Username'
                     value={username}
                     label='username'
+                    autoComplete="off"
                     required
                 />
                 <input
@@ -57,6 +59,7 @@ const SignIn = () => {
                     placeholder='Email'
                     value={email}
                     label='email'
+                    autoComplete="off"
                     required
                 />
                 <input
@@ -66,17 +69,9 @@ const SignIn = () => {
                     placeholder='Password'
                     value={password}
                     label='password'
+                    autoComplete="off"
                     required
                 />
-                {/* <input
-                    name='password'
-                    type='password'
-                    onChange={confirmPassword}
-                    placeholder='Password'
-                    value={password}
-                    label='password'
-                    required
-                /> */}
                 <button type='submit'> Sign up </button>
                 <span>warning: verify your account within 48 hours otherwise your account will be deleted.</span>
             </form>
