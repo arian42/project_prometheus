@@ -51,7 +51,8 @@ class data:
             'time': datetime.utcnow().strftime('%H:%M')
         }
         self.chat_records.append(data)
-        pickle.dump(data, self._chat_file)
+        with open('chat.pickle', 'wb') as f:
+            pickle.dump(self.chat_records, f)
 
     def _users_by_name(self):
         """ this makes user queries eazy and fast. this will run at runtime """
