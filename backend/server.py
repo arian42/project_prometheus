@@ -10,7 +10,7 @@ from flask_cors import CORS
 import pickle  # for data storage
 import re
 from hashlib import md5  # change this for the love of god
-
+import time
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -27,7 +27,10 @@ class data:
         for file_name in ("users.pickle", "chat.pickle"):
             if not Path(file_name).is_file():
                 with open(file_name, 'bw+') as f:
-                    pickle.dump(dict(), f)
+                    if file_name == "users.pickle":
+                        pickle.dump(dict(), f)
+                    else:
+                        pickle.dump(list(), f)
 
         self.chat_records = self._read_data('chat.pickle')
         self._chat_file = open('chat.pickle', 'ab+')
@@ -44,11 +47,13 @@ class data:
                     break
         return recoreds
 
-    def save_chat(self, message, username):
+    def save_chat(self, message, userid):
+        chat_id = int(str(userid) + str(int(time.time())))
         data = {
-            'username': username,
-            'msg': message,
-            'time': datetime.utcnow().strftime('%H:%M')
+            'id': chat_id,
+            'author': self.users[userid]["username"],
+            'message': message,
+            'timestamp': int(time.time() * 1000)
         }
         self.chat_records.append(data)
         with open('chat.pickle', 'wb') as f:
@@ -88,6 +93,7 @@ def token_required(func):
     @wraps(func)
     def decorated(*args, **kwargs):
         token = None
+        print(request.headers)
         # jwt is passed in the request header
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
@@ -203,7 +209,7 @@ def profile(user_id, *argv, **kwargs):
 def chat(user_id, *argv, **kwargs):
     if request.method == 'POST':
         d = request.get_json(force=True)
-        db.save_chat(d.get('msg', "NO data sent."), db.users[user_id]['username'])
+        db.save_chat(d.get('msg', "NO data sent."), user_id)
         return jsonify(success=True)
     else:
         return make_response(jsonify(db.chat_records), 200)
