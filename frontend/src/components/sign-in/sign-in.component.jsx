@@ -37,6 +37,7 @@ const SignIn = () => {
                     placeholder='Username or Email'
                     value={usernameOrEmail}
                     label='username or email'
+                    autoComplete="on"
                     required
                 />
                 <input
@@ -46,6 +47,7 @@ const SignIn = () => {
                     placeholder='Password'
                     value={password}
                     label='password'
+                    autoComplete="on"
                     required
                 />
                 <button className='button' type='submit'> Sign in</button>

@@ -16,8 +16,6 @@ const signInSignUpProfile = async ({username,token}) => {
 
     const profileFetchedData = await profileFetchedJson.json();
 
-    console.log({...profileFetchedData, token});
-
     return {...profileFetchedData, token};
 }
 

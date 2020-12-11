@@ -4,7 +4,7 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async () => {
     let fetchedChat = await fetch("http://127.0.0.1:5000/api/chat");
     let stringedChat = await fetchedChat.json();
     let listedChat = await stringedChat.map((a) => ([
-        <span>{a.user}</span>,
+        <span>{a.username}</span>,
         <span>{a.time}</span>,
         <span>{a.msg}</span>,
     ]));
