@@ -16,7 +16,7 @@ const Chat = () => {
         let fetchingChat = async () => {
 
             if (!token) {
-                history.push('/someRoute');
+                history.push('/');
                 return;
             }
 
@@ -26,6 +26,7 @@ const Chat = () => {
                 },
             });
             let stringedChat = await fetchedChat.json();
+            //console.log(stringedChat);
             let listedChat = await stringedChat.map((a) => ([
                 <span>{a.username}</span>,
                 <span>{a.time}</span>,
@@ -42,7 +43,7 @@ const Chat = () => {
 
         const intervalId = setInterval(() => {
             fetchingChat();
-        }, 1000);
+        }, 100000);
 
         return () => clearInterval(intervalId);
 

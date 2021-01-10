@@ -5,6 +5,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session'; // defaults to localStorage for web
 
 import userReducer from './user/userReducer';
+import chatReducer from './chat/chatReducer';
 
 const persistConfig = {
     key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    chat: chatReducer,
 });
 
 // Middleware: Redux Persist Persisted Reducer
