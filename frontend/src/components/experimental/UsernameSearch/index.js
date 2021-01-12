@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './ConversationSearch.css';
+import './ConversationSearch.scss';
 
 export default function ConversationSearch() {
 
@@ -11,14 +11,16 @@ export default function ConversationSearch() {
 
   return (
     <div className="conversation-search">
-      <input
-        type="search"
-        className="conversation-search-input" 
-        placeholder="Search People"
-        onChange={handleChange}
-        value={Person}
-        label="Search People"
-      />
+      <form className="form" onSubmit={handleChange}>
+        <input
+          type="search"
+          className="conversation-search-input" 
+          placeholder="Search People"
+          onChange={handleChange}
+          value={Person}
+          label="Search People"
+        />
+      </form>
     </div>
   );
 }
