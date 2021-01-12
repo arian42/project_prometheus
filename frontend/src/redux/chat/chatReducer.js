@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { io } from 'socket.io-client';
+//import { io } from 'socket.io-client';
 
-export const fetchChats = createAsyncThunk('chat/fetchChats', async () => {
-    let fetchedChat = await fetch("http://127.0.0.1:5000/api/chat");
+export const fetchChats = createAsyncThunk('chat/fetchChats', async (user) => {
+    let fetchedChat = await fetch(`http://127.0.0.1:5000/api/chat/${user}`);
     let stringedChat = await fetchedChat.json();
     let listedChat = await stringedChat;
 
@@ -18,7 +18,7 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async (message, 
     let messageJSON = {
         "msg": `${message}`,
     }
-      
+
     fetch("http://127.0.0.1:5000/api/chat",{
         headers: {
             'x-access-token': `${token}`
@@ -28,25 +28,25 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async (message, 
     });
 });
 
-export const socketChat = createAsyncThunk('chat/socketChat', async (_, { dispatch, getState }) => {
-    const {token} = getState().user;
+// export const socketChat = createAsyncThunk('chat/socketChat', async (_, { dispatch, getState }) => {
+//     const {token} = getState().user;
 
-    let server = `http://localhost:5000/socket/${token}`;
+//     let server = `http://localhost:5000/socket/${token}`;
 
-    const socket = io(server);
+//     const socket = io(server);
 
-    dispatch({
-        type: "chat/update",
-        payload: null,
-    });
+//     dispatch({
+//         type: "chat/update",
+//         payload: null,
+//     });
 
-    socket.on("update", updates => {
-        dispatch({
-            type: "chat/update",
-            payload: updates,
-        });
-    });
-});
+//     socket.on("update", updates => {
+//         dispatch({
+//             type: "chat/update",
+//             payload: updates,
+//         });
+//     });
+// });
 
 export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, { dispatch, getState }) => {
     const {token} = getState().user;
@@ -59,8 +59,6 @@ export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, 
 
     let stringedChat = await fetchedChat.json();
 
-    dispatch(socketChat());
-
     return stringedChat;
 });
 
@@ -68,6 +66,7 @@ const chatSlice = createSlice({
     name: 'chat',
     initialState: {
         chatsList: [],
+        currentConversation: "",
         chats: [],
         status: 'idle',
         error: null,
@@ -105,12 +104,12 @@ const chatSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         },
-        [socketChat.pending]: (state, action) => {
-        },
-        [socketChat.fulfilled]: (state, action) => {
-        },
-        [socketChat.rejected]: (state, action) => {
-        },
+        // [socketChat.pending]: (state, action) => {
+        // },
+        // [socketChat.fulfilled]: (state, action) => {
+        // },
+        // [socketChat.rejected]: (state, action) => {
+        // },
     }
 });
 
