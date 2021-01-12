@@ -61,7 +61,7 @@ export default function ConversationList(props) {
               )
             }
           </Fragment>
-        : 
+        :
           <Fragment>
             <Toolbar
                 title="Messenger"

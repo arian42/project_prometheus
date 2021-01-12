@@ -1,8 +1,11 @@
 import React,
   {
     //useEffect,
-    useState
+    useState,
+    Fragment
   } from 'react';
+
+import Spinner from '../../spinner/spinner.component.jsx';
 import Compose from '../Compose';
 import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
@@ -19,7 +22,7 @@ export default function MessageList(props) {
   ] = useState([]);
   //const token = useSelector( state => state.user.token );
   const MY_USER_ID = useSelector( state => state.user.profile.username);
-
+  const currentConversation = useSelector( state => state.chat.currentConversation);
   //let history = useHistory();
 
   // useEffect(() => {
@@ -117,26 +120,35 @@ export default function MessageList(props) {
 
     return(
       <div className="message-list">
-        <Toolbar
-          title="Conversation Title"
-          rightItems={[
-            <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
-            <ToolbarButton key="video" icon="ion-ios-videocam" />,
-            <ToolbarButton key="phone" icon="ion-ios-call" />
-          ]}
-        />
+        {
+          currentConversation ?
+            <Fragment>
+              <Toolbar
+                title= {`${currentConversation}`}
+                rightItems={[
+                  <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
+                  //<ToolbarButton key="video" icon="ion-ios-videocam" />,
+                  //<ToolbarButton key="phone" icon="ion-ios-call" />
+                ]}
+              />
 
-        <div className="message-list-container">{renderMessages()}</div>
+              <div className="message-list-container">{renderMessages()}</div>
 
-        <Compose rightItems={[
-          <ToolbarButton key="send" icon="ion-navigate-outline" />,
-          //<ToolbarButton key="photo" icon="ion-ios-camera" />,
-          //<ToolbarButton key="image" icon="ion-ios-image" />,
-          //<ToolbarButton key="audio" icon="ion-ios-mic" />,
-          //<ToolbarButton key="money" icon="ion-ios-card" />,
-          //<ToolbarButton key="games" icon="ion-logo-game-controller-b" />,
-          //<ToolbarButton key="emoji" icon="ion-ios-happy" />
-        ]}/>
+              <Compose rightItems={[
+                <ToolbarButton key="send" icon="ion-navigate-outline" />,
+                //<ToolbarButton key="photo" icon="ion-ios-camera" />,
+                //<ToolbarButton key="image" icon="ion-ios-image" />,
+                //<ToolbarButton key="audio" icon="ion-ios-mic" />,
+                //<ToolbarButton key="money" icon="ion-ios-card" />,
+                //<ToolbarButton key="games" icon="ion-logo-game-controller-b" />,
+                //<ToolbarButton key="emoji" icon="ion-ios-happy" />
+              ]}/>
+            </Fragment>
+          :
+            <Fragment>
+              <Spinner/>
+            </Fragment>
+        }
       </div>
     );
 }

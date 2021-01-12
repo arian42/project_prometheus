@@ -9,9 +9,15 @@ export default function ConversationSearch() {
     setPerson(`${event.target.value}`);
   }
 
+  const handleSubmit = async event => {
+    event.preventDefault();
+
+
+  }
+
   return (
     <div className="conversation-search">
-      <form className="form" onSubmit={handleChange}>
+      <form className="form" onSubmit={handleSubmit}>
         <input
           type="search"
           className="conversation-search-input" 

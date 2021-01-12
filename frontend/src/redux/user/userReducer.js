@@ -84,8 +84,11 @@ const userSlice = createSlice({
     reducers: {
         signOut(state, _action) {
             state.token = null;
-            state.name = null;
-            state.phoneToken = null;
+            state.profile = {
+                name: null,
+                username: null,
+                avatar: null,
+            };
             state.status = 'idle';
         },
     },
