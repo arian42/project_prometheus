@@ -19,10 +19,10 @@ export default function ConversationSearch() {
         <input
           type="search"
           className="conversation-search-input" 
-          placeholder="Search People"
+          placeholder="Search Conversations"
           onChange={handleChange}
           value={Conversation}
-          label="Search Conversation"
+          label="Search Conversations"
         />
       </form>
     </div>
