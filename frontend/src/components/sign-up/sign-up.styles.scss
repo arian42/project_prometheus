@@ -1,21 +1,26 @@
-
-.sign-in-and-sign-up {
-    .sign-up {
+.sign-up {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    height: 100%;
+    background-color: #f1f1f1;
+    .form {
         width: 380px;
-        display: flex;
-        flex-direction: column;
+        margin: auto;
         form {
-            input {
-                width: 100%;
+            
+            margin-bottom: 10px;
+        }
+        .warning {
+            text-align: left;
+            margin-top: 20px;
+            color: #888;
+            line-height: 1.3;
+            span {
+                color: #eea849;
+                font-weight: 600;
             }
         }
     }
-    .title {
-        margin: 10px 0;
-    }
-    .button {
-        // display: flex;
-        // justify-content: space-between;
-    }
 }
-

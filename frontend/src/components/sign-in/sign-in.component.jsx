@@ -28,30 +28,32 @@ const SignIn = () => {
 
     return (
         <div className='sign-in'>
-            <p className="title">I already have an account</p>
-            <form onSubmit={handleSubmit}>
-                <input
-                    name='usernameOrEmail'
-                    type='text'
-                    onChange={handleChange}
-                    placeholder='Username or Email'
-                    value={usernameOrEmail}
-                    label='username or email'
-                    autoComplete="on"
-                    required
-                />
-                <input
-                    name='password'
-                    type='password'
-                    onChange={handleChange}
-                    placeholder='Password'
-                    value={password}
-                    label='password'
-                    autoComplete="on"
-                    required
-                />
-                <button className='button' type='submit'> Sign in</button>
-            </form>
+            <div className="form">
+                <p className="title">I already have an account</p>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        name='usernameOrEmail'
+                        type='text'
+                        onChange={handleChange}
+                        placeholder='Username or Email'
+                        value={usernameOrEmail}
+                        label='username or email'
+                        autoComplete="on"
+                        required
+                    />
+                    <input
+                        name='password'
+                        type='password'
+                        onChange={handleChange}
+                        placeholder='Password'
+                        value={password}
+                        label='password'
+                        autoComplete="on"
+                        required
+                    />
+                    <button className='button' type='submit'> Sign in</button>
+                </form>
+            </div>
         </div>
     );
 };
