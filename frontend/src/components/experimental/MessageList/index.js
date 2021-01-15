@@ -121,10 +121,10 @@ export default function MessageList(props) {
     return(
       <div className="message-list">
         {
-          currentConversation ?
+          currentConversation.name ?
             <Fragment>
               <Toolbar
-                title= {`${currentConversation}`}
+                title= {`${currentConversation.name}`}
                 rightItems={[
                   <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
                   //<ToolbarButton key="video" icon="ion-ios-videocam" />,

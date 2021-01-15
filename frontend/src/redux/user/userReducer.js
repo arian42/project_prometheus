@@ -63,6 +63,22 @@ export const profile = createAsyncThunk('user/profile', async (_, { getState } )
     console.log(fetchedJson);
 
     const fetchedData = await fetchedJson.json();
+
+    return fetchedData;
+});
+
+export const profileSearch = createAsyncThunk('user/profileSearch', async ({search}, { getState } ) => {
+    const {token} = getState().user;
+
+    const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
+        method: 'POST',
+        body: JSON.stringify({
+            'username': `${search}`,
+            'token': `${token}`,
+        })
+    });
+
+    const fetchedData = await fetchedJson.json();
     console.log(fetchedData);
 
     return fetchedData;
@@ -78,6 +94,11 @@ const userSlice = createSlice({
             name: null,
             username: null,
             avatar: null,
+        },
+        userSearch: {
+            name: null,
+            photo: null,
+            username: null,
         },
         status: 'idle',
         error: null,
@@ -130,6 +151,17 @@ const userSlice = createSlice({
             state.profile = action.payload;
         },
         [profile.rejected]: (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        },
+        [profileSearch.pending]: (state, _action) => {
+            state.status = 'loading'
+        },
+        [profileSearch.fulfilled]: (state, action) => {
+            state.status = 'succeeded';
+            state.userSearch = action.payload;
+        },
+        [profileSearch.rejected]: (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
         },
