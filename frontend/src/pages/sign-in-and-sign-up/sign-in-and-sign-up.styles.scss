@@ -1,8 +1,36 @@
 .sign-in-and-sign-up {
-    width: 850px;
+    // width: 850px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin: 30px auto;
+
+    input {
+      box-sizing: border-box;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      background-color: transparent !important;
+      padding: 10px 10px;
+      margin-bottom: 10px;
+      &:focus {
+        outline: none !important;
+        border: none;
+        border-bottom: 2px solid #34a6d2 ;
+      }
+    }
+    input:-internal-autofill-selected {
+      background-color: transparent !important;
+      border-bottom-color:#34a6d2 ;
+    }
+
+    button {
+      width: 100%;
+      text-align: center;
+      border: none;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
 
     @media screen and (max-width: 800px) {
         flex-direction: column;
