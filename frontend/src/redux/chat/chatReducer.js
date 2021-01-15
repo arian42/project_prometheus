@@ -69,6 +69,7 @@ const chatSlice = createSlice({
         currentConversation: {
             name: null,
             username: null,
+            avatar: null,
         },
         chats: [],
         status: 'idle',

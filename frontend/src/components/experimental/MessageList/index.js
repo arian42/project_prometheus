@@ -1,9 +1,11 @@
 import React,
   {
-    //useEffect,
-    useState,
+    useEffect,
+    //useState,
     Fragment
   } from 'react';
+
+import { fetchChats } from '../../../redux/chat/chatReducer';
 
 import Spinner from '../../spinner/spinner.component.jsx';
 import Compose from '../Compose';
@@ -11,21 +13,21 @@ import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
 import Message from '../Message';
 import moment from 'moment';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 //import { useHistory } from "react-router-dom";
 
 import './MessageList.css';
 
 export default function MessageList(props) {
-  const [messages, 
-    //setMessages
-  ] = useState([]);
+  const dispatch = useDispatch();
+  //const [messages,setMessages] = useState([]);
   //const token = useSelector( state => state.user.token );
   const MY_USER_ID = useSelector( state => state.user.profile.username);
   const currentConversation = useSelector( state => state.chat.currentConversation);
+  const messages = useSelector( state => state.chat.chats);
   //let history = useHistory();
 
-  // useEffect(() => {
+  useEffect(() => {
   //   let fetchingChat = async () => {
 
     //   if (!token) {
@@ -49,13 +51,17 @@ export default function MessageList(props) {
 
     // fetchingChat();
 
-    // const intervalId = setInterval(() => {
-    //     fetchingChat();
-    // }, 2000000);
+    if (currentConversation.username) {
+      const username = currentConversation.username;
 
-    // return () => clearInterval(intervalId);
+      const intervalId = setInterval(() => {
+          dispatch(fetchChats(username));
+      }, 1000);
 
-  // }, [token, history]);
+      return () => clearInterval(intervalId);
+    }
+
+  }, [dispatch, currentConversation.username]);
 
 
 
