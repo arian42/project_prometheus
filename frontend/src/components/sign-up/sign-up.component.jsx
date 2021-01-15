@@ -30,51 +30,53 @@ const SignIn = () => {
 
     return (
         <div className='sign-up'>
-            <p className="title">Don't have an account, why not make one? </p>
-            <form onSubmit={handleSubmit}>
-                <input
-                    name='name'
-                    type='name'
-                    onChange={handleChange}
-                    placeholder='Name'
-                    value={name}
-                    label='name'
-                    autoComplete="off"
-                    required
-                />
-                <input
-                    name='username'
-                    type='username'
-                    onChange={handleChange}
-                    placeholder='Username'
-                    value={username}
-                    label='username'
-                    autoComplete="off"
-                    required
-                />
-                <input
-                    name='email'
-                    type='email'
-                    onChange={handleChange}
-                    placeholder='Email'
-                    value={email}
-                    label='email'
-                    autoComplete="off"
-                    required
-                />
-                <input
-                    name='password'
-                    type='password'
-                    onChange={handleChange}
-                    placeholder='Password'
-                    value={password}
-                    label='password'
-                    autoComplete="off"
-                    required
-                />
-                <button type='submit'> Sign up </button>
-                <span>warning: verify your account within 48 hours otherwise your account will be deleted.</span>
-            </form>
+            <div className="form">
+                <p className="title">Don't have an account, why not make one? </p>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        name='name'
+                        type='name'
+                        onChange={handleChange}
+                        placeholder='Name'
+                        value={name}
+                        label='name'
+                        autoComplete="off"
+                        required
+                    />
+                    <input
+                        name='username'
+                        type='username'
+                        onChange={handleChange}
+                        placeholder='Username'
+                        value={username}
+                        label='username'
+                        autoComplete="off"
+                        required
+                    />
+                    <input
+                        name='email'
+                        type='email'
+                        onChange={handleChange}
+                        placeholder='Email'
+                        value={email}
+                        label='email'
+                        autoComplete="off"
+                        required
+                    />
+                    <input
+                        name='password'
+                        type='password'
+                        onChange={handleChange}
+                        placeholder='Password'
+                        value={password}
+                        label='password'
+                        autoComplete="off"
+                        required
+                    />
+                    <button type='submit'> Sign up </button>
+                </form>
+                <span className="warning"><span>Attention!</span> verify your account within 48 hours otherwise your account will be deleted.</span>
+            </div>
         </div>
     );
 };

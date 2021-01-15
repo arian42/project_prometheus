@@ -5,6 +5,7 @@ import ConversationListItem from '../ConversationListItem';
 import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
 import { fetchChatsList } from '../../../redux/chat/chatReducer';
+import {nullUserSearch} from '../../../redux/user/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './ConversationList.css';
@@ -13,10 +14,15 @@ export default function ConversationList(props) {
   const [conversations, setConversations] = useState([]);
   const [messagesSearch, setMessagesSearch] = useState(true);
 
-  const toggle = (value) => setMessagesSearch( value ? false : true);
-
   const dispatch = useDispatch();
   const response = useSelector(state => state.chat);
+
+  const toggle = (value) => {
+    if (value === false) {
+      dispatch(nullUserSearch());
+    }
+    setMessagesSearch( value ? false : true);
+  }
 
   const getConversations = () => {
     dispatch(fetchChatsList());
@@ -46,7 +52,7 @@ export default function ConversationList(props) {
             <Toolbar
               title="Messenger"
               leftItems={[
-                <ToolbarButton key="cog" icon="ion-ios-cog" />
+                <ToolbarButton key="cog" icon="ion-ios-cog" func={() => console.log("setting clicked")}/>
               ]}
               rightItems={[
                 <ToolbarButton key="add" icon="ion-ios-add-circle-outline" func={()=>toggle(messagesSearch)}/>
@@ -67,7 +73,7 @@ export default function ConversationList(props) {
             <Toolbar
                 title="Messenger"
                 leftItems={[
-                  <ToolbarButton key="cog" icon="ion-ios-cog" />
+                  <ToolbarButton key="cog" icon="ion-ios-cog" func={() => console.log("setting clicked")}/>
                 ]}
                 rightItems={[
                   <ToolbarButton key="add" icon="ion-ios-add-circle-outline" color="red" func={()=>toggle(messagesSearch)}/>

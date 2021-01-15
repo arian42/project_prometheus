@@ -7,19 +7,19 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async (user) => {
     let listedChat = await stringedChat;
 
     //I don't know why the first message sent from server is empty so I simply shift it
-    listedChat.shift();
+    //listedChat.shift();
 
     return listedChat;
 });
 
-export const sendMessage = createAsyncThunk('chat/sendMessage', async (message, { getState }) => {
+export const sendMessage = createAsyncThunk('chat/sendMessage', async ({user, message}, { getState }) => {
     const {token} = getState().user;
 
     let messageJSON = {
         "msg": `${message}`,
     }
 
-    fetch("http://127.0.0.1:5000/api/chat",{
+    fetch(`http://127.0.0.1:5000/api/chat/${user}`,{
         headers: {
             'x-access-token': `${token}`
         },
@@ -66,7 +66,11 @@ const chatSlice = createSlice({
     name: 'chat',
     initialState: {
         chatsList: [],
-        currentConversation: "",
+        currentConversation: {
+            name: null,
+            username: null,
+            avatar: null,
+        },
         chats: [],
         status: 'idle',
         error: null,

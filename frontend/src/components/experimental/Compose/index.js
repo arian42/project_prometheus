@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import { 
-  //useSelector,
+  useSelector,
   useDispatch
 } from 'react-redux';
 import { sendMessage as sendMyMessage } from '../../../redux/chat/chatReducer';
@@ -9,6 +9,8 @@ import { sendMessage as sendMyMessage } from '../../../redux/chat/chatReducer';
 import './Compose.css';
 
 export default function Compose(props) {
+  const currentConversation = useSelector( state => state.chat.currentConversation.username);
+
   const [message, setMessage] = useState("");
   //const token = useSelector( state => state.user.token );
   const dispatch = useDispatch();
@@ -32,7 +34,7 @@ export default function Compose(props) {
     //     body: JSON.stringify(messageJSON)
     // });
 
-    dispatch(sendMyMessage(message));
+    dispatch(sendMyMessage(currentConversation, message));
 
     setMessage("");
   }
@@ -57,6 +59,5 @@ export default function Compose(props) {
         props.rightItems
       }
     </div>
-    
   );
 }
