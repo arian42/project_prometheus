@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './ConversationSearch.scss';
+import './UsernameSearch.scss';
 
 export default function ConversationSearch() {
 

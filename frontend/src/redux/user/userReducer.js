@@ -51,7 +51,6 @@ export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, p
 });
 
 export const profile = createAsyncThunk('user/profile', async (_, { getState } ) => {
-
     const {username,token} = getState().user;
 
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
@@ -61,8 +60,10 @@ export const profile = createAsyncThunk('user/profile', async (_, { getState } )
             'token': `${token}`,
         })
     });
+    console.log(fetchedJson);
 
     const fetchedData = await fetchedJson.json();
+    console.log(fetchedData);
 
     return fetchedData;
 });
