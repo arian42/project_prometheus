@@ -5,7 +5,7 @@ from functools import wraps
 import jwt
 from pathlib import Path
 from random import getrandbits
-from flask_cors import CORS
+from flask_cors import cross_origin, CORS
 import pickle  # for data storage
 import re
 from hashlib import md5  # change this for the love of god
@@ -15,10 +15,11 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask_socketio import SocketIO
 
 app = Flask(__name__)
-CORS(app)
+
 app.config['SECRET_KEY'] = 'not-that-secret'
 app.config["DEBUG"] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+
 db = SQLAlchemy(app)
 # socketio = SocketIO(app)
 
@@ -183,6 +184,7 @@ def token_required(func):
 
 
 @app.route('/api/sign-up', methods=['POST'])
+@cross_origin()
 def signup():
     data = request.get_json(force=True)
 
@@ -234,6 +236,7 @@ def signup():
 
 
 @app.route('/api/sign-in', methods=['POST'])
+@cross_origin()
 def login():
     """ this functions will give you your token"""
     post_data = request.get_json(force=True)
@@ -260,6 +263,7 @@ def login():
 
 @app.route('/api/profile', methods=['GET', 'POST'])
 @token_required
+@cross_origin()
 def profile(user_id, *argv, **kwargs):
     user = User.query.filter_by(id=user_id).first()
     target = {
@@ -283,6 +287,7 @@ def profile(user_id, *argv, **kwargs):
 
 @app.route('/api/search/<username>', methods=['GET'])
 @app.route('/api/search', methods=['POST', 'GET'])
+@cross_origin()
 @token_required
 def search(user_id, username=None, *argv, **kwargs):
     ans = []
@@ -305,6 +310,7 @@ def search(user_id, username=None, *argv, **kwargs):
 
 
 @app.route('/api/chat/<username>', methods=['GET', 'POST'])
+@cross_origin()
 @token_required
 def chat(user_id, username, *argv, **kwargs):
     # on post you will send message on get you will reccive all message
@@ -348,6 +354,7 @@ def chat(user_id, username, *argv, **kwargs):
 
 """ this will not work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"""
 @app.route('/api/chats', methods=['GET', "POST"])
+@cross_origin()
 @token_required
 def conversations(user_id, *argv, **kwargs):
     res = []
