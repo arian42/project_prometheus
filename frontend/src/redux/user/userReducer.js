@@ -77,7 +77,6 @@ export const conversationProfile = createAsyncThunk('user/profile', async (_, { 
             'token': `${token}`,
         })
     });
-    console.log(fetchedJson);
 
     const fetchedData = await fetchedJson.json();
 

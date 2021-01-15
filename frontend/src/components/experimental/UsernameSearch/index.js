@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import './UsernameSearch.scss';
+import { useDispatch } from 'react-redux';
+
+import { profileSearch } from '../../../redux/user/userReducer';
 
 export default function ConversationSearch() {
 
+  const dispatch = useDispatch();
   const [Person, setPerson] = useState("");
   
   const handleChange = event => {
     setPerson(`${event.target.value}`);
+    dispatch(profileSearch(Person));
   }
 
   const handleSubmit = async event => {

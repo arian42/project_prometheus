@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import './ConversationSearch.css';
+import { useDispatch } from 'react-redux';
 
 export default function ConversationSearch() {
   const [Conversation, setConversation] = useState("");
+  const dispatch = useDispatch();
   
   const handleChange = event => {
     setConversation(`${event.target.value}`);
+    
   }
 
   const handleSubmit = async event => {
