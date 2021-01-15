@@ -77,26 +77,25 @@ export const conversationProfile = createAsyncThunk('user/profile', async (_, { 
             'token': `${token}`,
         })
     });
-    console.log(fetchedJson);
 
     const fetchedData = await fetchedJson.json();
 
     return fetchedData;
 });
 
-export const profileSearch = createAsyncThunk('user/profileSearch', async ({search}, { getState } ) => {
+export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
     const {token} = getState().user;
+
 
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
         method: 'POST',
         body: JSON.stringify({
-            'username': `${search}`,
+            'username': `${person}`,
             'token': `${token}`,
         })
     });
 
     const fetchedData = await fetchedJson.json();
-    console.log(fetchedData);
 
     return fetchedData;
 });

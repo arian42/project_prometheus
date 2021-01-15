@@ -5,7 +5,6 @@ import {
 } from 'react-redux';
 import { sendMessage as sendMyMessage } from '../../../redux/chat/chatReducer';
 
-
 import './Compose.css';
 
 export default function Compose(props) {

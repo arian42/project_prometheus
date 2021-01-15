@@ -1,18 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './UsernameSearch.scss';
+import { useDispatch } from 'react-redux';
+
+import { profileSearch } from '../../../redux/user/userReducer';
 
 export default function ConversationSearch() {
+  const [person, setPerson] = useState("");
 
-  const [Person, setPerson] = useState("");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(profileSearch(person));
+  }, [person, dispatch]);
   
   const handleChange = event => {
-    setPerson(`${event.target.value}`);
+    setPerson(event.target.value);
   }
 
   const handleSubmit = async event => {
     event.preventDefault();
-
-
+  
   }
 
   return (
@@ -23,7 +30,7 @@ export default function ConversationSearch() {
           className="conversation-search-input" 
           placeholder="Search People"
           onChange={handleChange}
-          value={Person}
+          value={person}
           label="Search People"
         />
       </form>
