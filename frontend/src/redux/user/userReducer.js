@@ -4,7 +4,7 @@ import {
 } from '@reduxjs/toolkit';
 
 
-const signInSignUpProfile = async ({username,token}) => {
+const signInSignUpProfile = async ({username, token}) => {
 
     const profileFetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
         method: 'POST',
@@ -97,7 +97,7 @@ const userSlice = createSlice({
         },
         userSearch: {
             name: null,
-            photo: null,
+            avatar: null,
             username: null,
         },
         status: 'idle',
@@ -113,6 +113,13 @@ const userSlice = createSlice({
             };
             state.status = 'idle';
         },
+        nullUserSearch(state, _action) {
+            state.userSearch = {
+                name: null,
+                avatar: null,
+                username: null,
+            }
+        }
     },
     extraReducers: {
         [signUp.pending]: (state, _action) => {
@@ -171,4 +178,4 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { signOut } = userSlice.actions;
+export const { signOut, nullUserSearch } = userSlice.actions;
