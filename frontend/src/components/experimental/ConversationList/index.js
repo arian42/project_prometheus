@@ -34,6 +34,7 @@ export default function ConversationList(props) {
 
   useEffect(() => {
     getConversations();
+    // eslint-disable-next-line
   },[]);
 
   return (
