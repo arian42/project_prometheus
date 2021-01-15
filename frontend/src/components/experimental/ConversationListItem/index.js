@@ -12,7 +12,7 @@ export default function ConversationListItem(props) {
   const { user, photo, name, text } = props.data;
 
   const handleClick = user => {
-
+    
   }
 
   return (
