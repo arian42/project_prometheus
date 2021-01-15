@@ -4,13 +4,19 @@ import shave from 'shave';
 import './ConversationListItem.css';
 
 export default function ConversationListItem(props) {
+
   useEffect(() => {
     shave('.conversation-snippet', 20);
   })
 
-    const { photo, name, text } = props.data;
+  const { user, photo, name, text } = props.data;
 
-    return (
+  const handleClick = user => {
+
+  }
+
+  return (
+    <button onClick={() => handleClick(user)}>
       <div className="conversation-list-item">
         <img className="conversation-photo" src={photo} alt="conversation" />
         <div className="conversation-info">
@@ -18,5 +24,6 @@ export default function ConversationListItem(props) {
           <p className="conversation-snippet">{ text }</p>
         </div>
       </div>
-    );
+    </button>
+  );
 }
