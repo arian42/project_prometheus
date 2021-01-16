@@ -17,7 +17,7 @@ $darkText : #000d1c;
         width: 100%;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         padding: 20px 10px 0;
         .logo {
             // background-color: #fff;
@@ -26,9 +26,12 @@ $darkText : #000d1c;
                 height: auto;
             }
         }
-        .link {
-            a {
-                color:$darkText ;
+        .github_link {
+            color:$darkText ;
+
+            .icon-icon_github {
+                font-size: 33px;
+                color: #00356e;
             }
         }
     }

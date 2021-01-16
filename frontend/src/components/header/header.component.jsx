@@ -5,11 +5,13 @@ import './header.styles.scss';
 const Header = () => (
     <div>
         <div className="top-navbar">
-            <div className="logo">
+            <a href="#" className="logo">
                 <img src={logo} alt=""/>
-            </div>
-            <div className="link">
-                <a href="#">Github</a>
+            </a>
+            <div className="github_link">
+                <a href="https://github.com/arian42/project_prometheus">
+                    <span className="icon-icon_github"></span>
+                </a>
             </div>
         </div>
         <div className="header-content">
