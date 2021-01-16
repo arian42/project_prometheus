@@ -1,14 +1,26 @@
 $pColor : #007aff;
 $pColorHover : #006ce0;
 
+
+.invisible-layer {
+  margin-bottom: 100vh;
+}
+
 .sign-in-and-sign-up {
     // width: 850px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    // margin: 30px auto;
-    height: 100vh;
+    
+    // for effect 
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    color: #ffffff;
+    height: 100vh !important;
+    width: 100%;
 
     form {
       text-align: center;
