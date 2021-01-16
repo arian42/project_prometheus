@@ -1,15 +1,15 @@
-import prometheus from '../../../src/resource/prometheus.png';
-import logo from '../../../src/resource/logo-flame.png';
+import Prometheus from '../../../src/resource/prometheus.png';
+import Logo from '../../../src/resource/logo-flame.png';
 import './header.styles.scss';
 
 const Header = () => (
     <div>
         <div className="top-navbar">
             <a href="#" className="logo">
-                <img src={logo} alt=""/>
+                <img src={Logo} alt=""/>
             </a>
             <div className="github_link">
-                <a href="https://github.com/arian42/project_prometheus">
+                <a href="https://github.com/arian42/project_prometheus" target="blank">
                     <span className="icon-icon_github"></span>
                 </a>
             </div>
@@ -21,7 +21,7 @@ const Header = () => (
                 <button className="cta" >Start Messaging</button>
             </div>
             <div className="img">
-                <img src={prometheus} alt=""/>
+                <img src={Prometheus} alt=""/>
             </div>
         </div>
     </div>
