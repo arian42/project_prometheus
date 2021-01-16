@@ -29,9 +29,10 @@ export default function ConversationList(props) {
 
     let newConversations = response.chatsList.map(result => {
       return {
-        photo: result.profile.avatar,
-        name: `${result.profile.name}`,
+        photo: "https://randomuser.me/api/portraits/women/12.jpg",
+        name: `${result.name}`,
         text: `${result.lastmsg}`,
+        user: `${result.username}`,
       };
     });
 

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import './UsernameSearch.scss';
 import { useDispatch } from 'react-redux';
 
-import { profileSearch } from '../../../redux/user/userReducer';
+//import { profileSearch } from '../../../redux/user/userReducer';
+import { profileSearch } from '../../../redux/chat/chatReducer';
 
 export default function ConversationSearch() {
   const [person, setPerson] = useState("");
@@ -19,7 +20,6 @@ export default function ConversationSearch() {
 
   const handleSubmit = async event => {
     event.preventDefault();
-  
   }
 
   return (

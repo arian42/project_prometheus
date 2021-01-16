@@ -6,9 +6,6 @@ export const fetchChats = createAsyncThunk('chat/fetchChats', async (user) => {
     let stringedChat = await fetchedChat.json();
     let listedChat = await stringedChat;
 
-    //I don't know why the first message sent from server is empty so I simply shift it
-    //listedChat.shift();
-
     return listedChat;
 });
 
@@ -60,6 +57,22 @@ export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, 
     let stringedChat = await fetchedChat.json();
 
     return stringedChat;
+});
+
+export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
+    const {token} = getState().user;
+
+    const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
+        method: 'POST',
+        body: JSON.stringify({
+            'username': `${person}`,
+            'token': `${token}`,
+        })
+    });
+
+    const fetchedData = await fetchedJson.json();
+
+    return fetchedData;
 });
 
 const chatSlice = createSlice({
@@ -114,6 +127,17 @@ const chatSlice = createSlice({
         // },
         // [socketChat.rejected]: (state, action) => {
         // },
+        [profileSearch.pending]: (state, _action) => {
+            state.status = 'loading'
+        },
+        [profileSearch.fulfilled]: (state, action) => {
+            state.status = 'succeeded';
+            state.chatsList = action.payload;
+        },
+        [profileSearch.rejected]: (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        },
     }
 });
 
