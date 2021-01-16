@@ -7,9 +7,10 @@ const Settings = () => {
 
     return (
         <div>
-            <img src={avatar} alt="profile"></img>
+            <img src={avatar} alt="profile"/>
             <p>{name}</p>
             <p>@{username}</p>
+            <button onClick={()=>{}}>sign out</button>
         </div>
     )
 }

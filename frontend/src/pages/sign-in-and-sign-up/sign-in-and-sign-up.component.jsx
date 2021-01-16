@@ -12,9 +12,9 @@ function SignInAndSignUp() {
       <div className="header">
         <Header/>
       </div>
-      <div className="invisible-layer"></div>
+      <div id="scrollhere" className="invisible-layer"></div>
       <div className="sign-in-and-sign-up">
-        <SignIn/>
+        <SignIn />
         <SignUp/>
       </div>
       <Footer/>
