@@ -86,7 +86,6 @@ export const conversationProfile = createAsyncThunk('user/profile', async (_, { 
 export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
     const {token} = getState().user;
 
-
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
         method: 'POST',
         body: JSON.stringify({
@@ -99,10 +98,6 @@ export const profileSearch = createAsyncThunk('user/profileSearch', async (perso
 
     return fetchedData;
 });
-
-
-
-
 
 const userSlice = createSlice({
     name: 'user',
@@ -132,11 +127,7 @@ const userSlice = createSlice({
             state.status = 'idle';
         },
         nullUserSearch(state, _action) {
-            state.userSearch = {
-                name: null,
-                avatar: null,
-                username: null,
-            }
+            state.userSearch = []
         }
     },
     extraReducers: {

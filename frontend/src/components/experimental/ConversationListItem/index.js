@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import shave from 'shave';
 
 import './ConversationListItem.css';
@@ -18,10 +18,15 @@ export default function ConversationListItem(props) {
   return (
     <button onClick={() => handleClick(user)}>
       <div className="conversation-list-item">
-        <img className="conversation-photo" src={photo} alt="conversation" />
+        <img className="conversation-photo" src={photo} alt="#" />
         <div className="conversation-info">
           <h1 className="conversation-title">{ name }</h1>
-          <p className="conversation-snippet">{ text }</p>
+          {
+            text ? 
+              <p className="conversation-snippet">{ text }</p>
+            :
+            <Fragment></Fragment>
+          }
         </div>
       </div>
     </button>

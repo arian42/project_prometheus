@@ -5,18 +5,18 @@ import './header.styles.scss';
 const Header = () => (
     <div>
         <div className="top-navbar">
-            <a className="logo"  href="#">
+            <div className="logo">
                 <img src={logo} alt=""/>
-            </a>
+            </div>
             <div className="link">
-                <a href="#">Github</a>
+                <a href="https://github.com/arian42/project_prometheus">Github</a>
             </div>
         </div>
         <div className="header-content">
             <div className="title">
                 <h1>Prometheus<br></br>Messenger</h1>
                 <p>The hottest messenger you have ever seen</p>
-                <a className="cta" href="#">Start Messaging</a>
+                <button className="cta" >Start Messaging</button>
             </div>
             <div className="img">
                 <img src={prometheus} alt=""/>
