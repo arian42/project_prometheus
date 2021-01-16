@@ -3,8 +3,13 @@ $pColorHover : #005ec6;
 
 
 .invisible-layer {
-  margin-bottom: 100vh;
+  margin-bottom: calc(100vh + 6px);
+
+  @media screen and (max-width: 960px) {
+    margin-bottom: 0;
+  }
 }
+
 
 .sign-in-and-sign-up {
     // width: 850px;
@@ -19,7 +24,7 @@ $pColorHover : #005ec6;
     bottom: 0;
     z-index: -1;
     color: #ffffff;
-    height: 100vh !important;
+    height: 100vh;
     width: 100%;
 
     form {
@@ -84,8 +89,10 @@ $pColorHover : #005ec6;
 
     @media screen and (max-width: 960px) {
         flex-direction: column;
-        width: unset;
+        width: 100%;
         align-items: center;
         height: auto;
+        position: unset;
+        z-index: unset;
     }
 }

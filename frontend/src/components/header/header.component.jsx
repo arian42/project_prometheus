@@ -9,7 +9,7 @@ const Header = () => (
                 <img src={logo} alt=""/>
             </a>
             <div className="link">
-                <a href="#">Github</a>
+                <a href="#"><span className="icon-icon_github"></span></a>
             </div>
         </div>
         <div className="header-content">
