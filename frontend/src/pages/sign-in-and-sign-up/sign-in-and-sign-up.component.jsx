@@ -6,18 +6,29 @@ import Header from '../../components/header/header.component';
 import './sign-in-and-sign-up.styles.scss';
 
 function SignInAndSignUp() {
+<<<<<<< HEAD
     return (
       <div className="wrapper">
         <div className="header">
           <Header/>
         </div>
-        <div className="invisible-layer"></div>
         <div className="sign-in-and-sign-up">
           <SignIn/>
           <SignUp/>
         </div>
+=======
+  return (
+    <div className="wrapper">
+      <div className="header">
+        <Header/>
+>>>>>>> fcd85e9fbdb7ea15fddaa0b3fc9f092a92ac7f71
       </div>
-    );
-  }
+      <div className="sign-in-and-sign-up">
+        <SignIn/>
+        <SignUp/>
+      </div>
+    </div>
+  );
+}
   
 export default SignInAndSignUp;

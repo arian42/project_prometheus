@@ -39,8 +39,10 @@ class User(db.Model):
 
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user1 = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user2 = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_s = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_r = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    new_msg = db.Column(db.Integer, nullable=False)
+    last_msg_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
 class Message(db.Model):
@@ -52,97 +54,6 @@ class Message(db.Model):
 
     def __str__(self):
         return f'id={self.id} s={self.sender} r={self.receive} m=[{self.message}]'
-
-
-class data:
-    def __init__(self):
-        if not Path('users.pickle').is_file():
-            with open("users.pickle", 'bw+') as f:
-                pickle.dump(dict(), f)
-
-        self.users = pickle.load(open('users.pickle', 'rb'))
-        self.users_by_name = self._users_by_name()
-
-    def _gen_filename(self, user_id, user2_id):
-        user_id, user2_id = int(user_id), int(user2_id)
-        if user_id > user2_id:
-            return "chat/" + str(user_id) + str(user2_id) + ".pickle"
-        else:
-            return "chat/" + str(user2_id) + str(user_id) + ".pickle"
-
-    def _users_by_name(self):
-        """ this makes user queries eazy and fast. this will run at runtime """
-        foo = {}
-        for uid, user in self.users.items():
-            foo[user['username']] = uid
-        return foo
-
-    def read_chat(self, user_id, user2_id):
-        chat_records = None
-        with open(self._gen_filename(user_id, user2_id), 'rb') as f:
-            chat_records = pickle.load(f)
-        return chat_records
-
-    def save_chat(self, message, user_id, user2_id):
-        chat_id = int(str(user_id) + str(int(time.time())))
-        data = {
-            'id': chat_id,
-            'author': self.users[user_id]["username"],
-            'message': message,
-            'timestamp': int(time.time() * 1000)
-        }
-
-        dd = {
-            "newmsg": 0,
-            "time": data['timestamp'],
-            "lastmsg": data['message']
-        }
-        if self.users[user_id].get(user2_id):
-            dd["newmsg"] = self.users[user_id][user2_id]['newmsg'] + 1
-        self.users[user_id][user2_id] = dd
-
-        chat_records = None
-        with open(self._gen_filename(user_id, user2_id), 'rb') as f:
-            chat_records = pickle.load(f)
-        chat_records.append(data)
-        with open(self._gen_filename(user_id, user2_id), 'wb') as f:
-            pickle.dump(chat_records, f)
-        return chat_records
-
-    def add_user(self, email, username, name, password):
-        while True:
-            # this is not safe random but it is ok for this use
-            # https://stackoverflow.com/questions/3530294/how-to-generate-unique-64-bits-integers-from-python
-            user_id = getrandbits(64)
-            if not user_id in self.users:
-                self.users[user_id] = {
-                    "username": username, "email": email, "name": name, "password": password, "friends": [], 'cash': {}}
-                self.users_by_name[username] = user_id
-                break
-
-        with open('users.pickle', 'wb') as f:
-            pickle.dump(self.users, f)
-
-        return user_id
-
-    def start_chat(self, user_id, user2_id):
-        user_id, user2_id = int(user_id), int(user2_id)
-        if not self.users[user_id].get('friends'):  # if users dose not have frinds
-            self.users[user_id]['friends'] = []
-
-        if user2_id not in self.users[user_id]['friends']:  # we will add user now
-            # create chat file
-            with open(self._gen_filename(user_id, user2_id), 'bw+') as f:
-                pickle.dump(list(), f)
-            # update user profile
-            self.users[user_id]['friends'].append(user2_id)
-            self.users[user2_id]['friends'].append(user_id)
-            with open('users.pickle', 'wb') as f:
-                pickle.dump(self.users, f)
-
-
-# db_old like instance
-db_old = data()
 
 
 # decorator for verifying the JWT
@@ -309,6 +220,14 @@ def search(user_id, username=None, *argv, **kwargs):
     return make_response(jsonify(ans), 200)
 
 
+def is_friend(user_1, user_2):
+    q = (
+        Chat.query.filter_by(user_s=user_1).filter_by(user_r=user_2).all(),
+        Chat.query.filter_by(user_s=user_2).filter_by(user_r=user_1).all()
+    )
+
+
+
 @app.route('/api/chat/<username>', methods=['GET', 'POST'])
 @cross_origin()
 @token_required
@@ -325,16 +244,30 @@ def chat(user_id, username, *argv, **kwargs):
             receive=user2.id,
             message=d.get('msg', "NO data sent.")
         )
-
         db.session.add(the_msg)
+
+        # check if they are friends
+        friend = Chat.query.filter_by(user_s=user_id).filter_by(user_r=user2.id).first()
+        if not friend:
+            # add friends
+            friend1 = Chat(user_s=user_id, user_r=user2.id, new_msg=1)
+            friend2 = Chat(user_r=user_id, user_s=user2.id, new_msg=0)
+            db.session.add(friend1)
+            db.session.add(friend2)
+        else:
+            friend.new_msg += 1
+
+        # don't forget to commit
         db.session.commit()
         return jsonify(success=True)
     else:
         res_d = []
 
-        # for m in Message.query.all():
-        #     print(m)
-        # print(f's=user2={user2.id}  r=user_id={user_id}')
+        # set my messages to 0 after view
+        friend = Chat.query.filter_by(user_s=user2.id).filter_by(user_r=user_id).first()
+        friend.new_msg = 0
+        db.session.commit()
+
         queryies = (
             Message.query.filter_by(sender=user2.id).filter_by(receive=user_id).all(),
             Message.query.filter_by(sender=user_id).filter_by(receive=user2.id).all()
@@ -343,7 +276,7 @@ def chat(user_id, username, *argv, **kwargs):
             for msg in messages:
                 le_msg = {
                     'id': msg.id,
-                    'author': user2.username,
+                    'author': user2.username if user_id != msg.sender else "You",
                     'message': msg.message,
                     'timestamp': msg.timestamp
                 }
@@ -352,29 +285,61 @@ def chat(user_id, username, *argv, **kwargs):
         # print(res_d)
         return make_response(jsonify(res_d), 200)
 
-""" this will not work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"""
+
 @app.route('/api/chats', methods=['GET', "POST"])
 @cross_origin()
 @token_required
 def conversations(user_id, *argv, **kwargs):
+
     res = []
-    print(db_old.users)
-    for ids in db_old.users[user_id].get('friends', []):
-        profile = {
-            'name': db_old.users[ids]['name'],
-            'username': db_old.users[ids]['username'],
+    friends = Chat.query\
+        .join(User, Chat.user_s == User.id)\
+        .add_columns(User.name, User.username, Chat.user_r, Chat.user_s, Chat.new_msg)\
+        .filter(Chat.user_r == user_id)
+
+    for f in friends:
+        # last message of oposite/other user
+        last_message_o = Message.query.filter_by(sender=f.user_s)\
+            .filter_by(receive=user_id) \
+            .order_by(Message.id.desc()).first()
+        # .order_by('-id').first()
+
+        # my last message
+        last_message_me = Message.query.filter_by(receive=f.user_s)\
+            .filter_by(sender=user_id) \
+            .order_by(Message.id.desc()).first()
+
+        # this will select newest message bettwin sender and reciver
+        if last_message_o and last_message_me:
+            if last_message_me.timestamp > last_message_o.timestamp:
+                lm = last_message_me
+            else:
+                lm = last_message_o
+        else:
+            # one of them is null
+            if last_message_o:
+                lm = last_message_o
+            elif last_message_me :
+                lm = last_message_me
+            else:
+                # this should not happen normally
+                class why_this_exist:
+                    def __init__(self):
+                        self.timestamp = ""
+                        self.message = "-- Removed --"
+
+                lm = why_this_exist()
+
+        p = {
+            'name': f.name,
+            'username': f.username,
             'avatar': "#"
         }
-        gg = db_old.users[ids].get(user_id, {
-            "newmsg": 0,
-            "time": 0,
-            "lastmsg": None
-        })
         res.append({
-            "profile": profile,
-            "newmsg": gg['newmsg'],
-            "time": gg['time'],
-            "lastmsg": gg['lasmsg']
+            "profile": p,
+            "newmsg": f.new_msg,
+            "time": lm.timestamp,
+            "lastmsg": lm.message
         })
 
     newlist = sorted(res, key=lambda k: k['time'])
@@ -384,5 +349,4 @@ def conversations(user_id, *argv, **kwargs):
 if __name__ == '__main__':
     if not Path('test.db').is_file():
         db.create_all()
-    # socketio.run(app)
     app.run()
