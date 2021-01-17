@@ -1,11 +1,48 @@
 .app {
-    height: 100vp;
-    width: 100vp;
+    .messenger {
+        .sidebar {
+
+        }
+        .content {
+
+        }
+    
+        @media screen and (max-width: 960px) {
+            display: flex;
+            .sidebar {
+                grid-row-start: unset;
+                grid-row-end: unset;
+                width: 30%;
+            }
+            .content {
+                grid-row-start: unset;
+                grid-row-end: unset;
+                width: 70%;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                height: 100%;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 2;
+            }
+            .content {
+                width: 100%;
+            }
+        }
+        @media screen and (max-width: 375px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+    }
 }
 
-
-.scrollable {
-    position: relative;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-}
+// .scrollable {
+//     position: relative;
+//     overflow-y: scroll;
+//     -webkit-overflow-scrolling: touch;
+// }

@@ -1,0 +1,92 @@
+.setting-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    background-color: rgba(0, 13, 28, 0.4);
+    .setting-content {
+        position: absolute;
+        top: 10%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        z-index: 999;
+
+        max-width: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .setting-header {
+            width: 100%;
+            text-align: center;
+
+            .title {
+                display: inline-block;
+            }
+            .close-btn {
+                float: right;
+            }
+        }
+
+        .setting-info {
+            margin-top: 40px;
+            p, span {
+                display: inline-block;
+            }
+
+            .profile-pic {
+                width: 100px;
+                height: 100px;
+                margin: auto;
+                border-radius: 50%;
+                overflow: hidden;
+                background-color: #e2f0ff;
+            }
+            .username-and-name {
+                display: table;
+                > div {
+                    margin-top: 20px;
+                    display: table-row;
+                    span {
+                        display: table-cell;
+                        color: #007AFF;
+                        font-size: 14px;
+                        font-weight: 600;
+                        padding-right: 10px;
+                    }
+                    p {
+                        display: table-cell;
+
+                    }
+                }
+            }
+
+        }
+        
+        .signout-btn {
+            margin-top: 40px;
+            border: none;
+            background-color: #ddd;
+            border-radius: 10px;
+            padding: 10px 30px;
+            font-size: 16px;
+            transition: all .2s ease-in-out;
+            cursor: pointer;
+            &:hover {
+                background-color: #ccc;
+            }
+            
+        }
+
+    }
+}

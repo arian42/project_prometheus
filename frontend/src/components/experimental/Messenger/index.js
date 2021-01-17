@@ -1,6 +1,7 @@
 import React from 'react';
 import ConversationList from '../ConversationList';
 import MessageList from '../MessageList';
+import SettingModal from '../../settings/settings.component.jsx';
 import './Messenger.css';
 
 export default function Messenger(props) {
@@ -32,6 +33,11 @@ export default function Messenger(props) {
         <div className="scrollable content">
           <MessageList />
         </div>
+
+        <div className="setting-container">
+          <SettingModal />
+        </div>
+        
       </div>
     );
 }
