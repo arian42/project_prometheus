@@ -17,7 +17,7 @@ const Settings = () => {
 
             <div className="setting-header">
                 <div className="title">Settings</div>
-                <button className="close-btn" onClick={()=> dispatch(off('settings'))}>x</button>
+                <button className="close-btn" onClick={()=> dispatch(off('settings'))}>&#10005;</button>
             </div>
 
             <div className="setting-info">
@@ -41,7 +41,7 @@ const Settings = () => {
                     dispatch(signOut());
                     history.push("/login");
                 }
-            }>sign out</button>
+            }>Sign out</button>
         </div>
     )
 }

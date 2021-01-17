@@ -17,7 +17,7 @@
         margin: auto;
         z-index: 999;
 
-        max-width: 400px;
+        width:380px;
         background-color: #fff;
         border-radius: 10px;
         padding: 20px;
@@ -29,44 +29,63 @@
         .setting-header {
             width: 100%;
             text-align: center;
+            position: relative;
 
             .title {
                 display: inline-block;
+                color: #000d1c;
             }
             .close-btn {
-                float: right;
+                position: absolute;
+                right: -10px;
+                top: -12px;
+                padding: 10px;
+                border: none;
+                background-color: transparent;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all .2s ease-in-out;
+                &:hover {
+                    color: #007AFF;
+                }
             }
         }
 
         .setting-info {
             margin-top: 40px;
+            width: 80%;
             p, span {
                 display: inline-block;
             }
 
             .profile-pic {
-                width: 100px;
-                height: 100px;
+                width: 120px;
+                height: 120px;
                 margin: auto;
                 border-radius: 50%;
                 overflow: hidden;
-                background-color: #e2f0ff;
+                background-color: #eee;
             }
             .username-and-name {
                 display: table;
+                border-collapse: separate;
+                border-spacing: 0 10px;
+                width: 100%;
+                margin-top: 20px;
                 > div {
-                    margin-top: 20px;
                     display: table-row;
                     span {
                         display: table-cell;
                         color: #007AFF;
                         font-size: 14px;
                         font-weight: 600;
-                        padding-right: 10px;
+                        padding: 10px 10px;
+                        border-bottom: 2px solid #ddd;
                     }
                     p {
                         display: table-cell;
-
+                        border-bottom: 2px solid #ddd;
+                        color: #000d1c;
                     }
                 }
             }
@@ -74,7 +93,8 @@
         }
         
         .signout-btn {
-            margin-top: 40px;
+            margin-top:40px;
+            margin-bottom: 20px;
             border: none;
             background-color: #ddd;
             border-radius: 10px;
@@ -88,5 +108,16 @@
             
         }
 
+    }
+
+    // responsive
+    @media screen and (max-width: 450px) {
+        .setting-content {
+            width: 100%;
+            top: unset;
+            bottom: 0;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
     }
 }
