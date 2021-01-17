@@ -1,22 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 //import { io } from 'socket.io-client';
 
-export const fetchChats = createAsyncThunk('chat/fetchChats', async (user) => {
-    let fetchedChat = await fetch(`http://127.0.0.1:5000/api/chat/${user}`);
+export const fetchChats = createAsyncThunk('chat/fetchChats', async (username, { dispatch, getState }) => {
+    const {token} = getState().user;
+    
+    let fetchedChat = await fetch(`http://127.0.0.1:5000/api/chat/${username}`, {
+        headers: {
+            'x-access-token': `${token}`
+        },
+    });
     let stringedChat = await fetchedChat.json();
     let listedChat = await stringedChat;
 
     return listedChat;
 });
 
-export const sendMessage = createAsyncThunk('chat/sendMessage', async ({user, message}, { getState }) => {
+export const sendMessage = createAsyncThunk('chat/sendMessage', async ({currentConversation, message}, { getState }) => {
     const {token} = getState().user;
 
     let messageJSON = {
         "msg": `${message}`,
     }
 
-    fetch(`http://127.0.0.1:5000/api/chat/${user}`,{
+    fetch(`http://127.0.0.1:5000/api/chat/${currentConversation}`,{
         headers: {
             'x-access-token': `${token}`
         },
@@ -45,7 +51,7 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async ({user, me
 //     });
 // });
 
-export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, { dispatch, getState }) => {
+export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, { getState }) => {
     const {token} = getState().user;
 
     let fetchedChat = await fetch("http://127.0.0.1:5000/api/chats", {
@@ -97,6 +103,14 @@ const chatSlice = createSlice({
                 state.status = "chatSocket worked"
             }
         },
+        setConversation(state, action) {
+            console.log(action.payload);
+            state.currentConversation = {
+                name: action.payload.name,
+                username: action.payload.username,
+                avatar: action.payload.avatar,
+            }
+        },
     },
     extraReducers: {
         [fetchChats.pending]: (state, action) => {
@@ -128,7 +142,7 @@ const chatSlice = createSlice({
         // [socketChat.rejected]: (state, action) => {
         // },
         [profileSearch.pending]: (state, _action) => {
-            state.status = 'loading'
+            state.status = 'loading';
         },
         [profileSearch.fulfilled]: (state, action) => {
             state.status = 'succeeded';
@@ -144,4 +158,4 @@ const chatSlice = createSlice({
 
 export default chatSlice.reducer;
 
-//export const {  } = chatSlice.actions;
+export const { setConversation } = chatSlice.actions;

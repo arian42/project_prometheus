@@ -265,7 +265,8 @@ def chat(user_id, username, *argv, **kwargs):
 
         # set my messages to 0 after view
         friend = Chat.query.filter_by(user_s=user2.id).filter_by(user_r=user_id).first()
-        friend.new_msg = 0
+        if friend:
+            friend.new_msg = 0
         db.session.commit()
 
         queryies = (

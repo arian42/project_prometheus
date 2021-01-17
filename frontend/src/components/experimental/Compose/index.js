@@ -33,7 +33,7 @@ export default function Compose(props) {
     //     body: JSON.stringify(messageJSON)
     // });
 
-    dispatch(sendMyMessage(currentConversation, message));
+    dispatch(sendMyMessage({currentConversation, message}));
 
     setMessage("");
   }

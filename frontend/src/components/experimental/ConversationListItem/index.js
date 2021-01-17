@@ -1,5 +1,8 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {useEffect} from 'react';
+import { useDispatch } from 'react-redux';
 import shave from 'shave';
+
+import { fetchChats, setConversation } from '../../../redux/chat/chatReducer.js';
 
 import './ConversationListItem.css';
 
@@ -9,23 +12,26 @@ export default function ConversationListItem(props) {
     shave('.conversation-snippet', 20);
   })
 
-  const { user, photo, name, text } = props.data;
+  let { username, avatar, name, text } = props.data;
+  console.log(username, name, avatar, text);
+  const dispatch = useDispatch();
 
-  const handleClick = user => {
-    
+  const handleClick = () => {
+    dispatch(setConversation({name, username, avatar}));
+    dispatch(fetchChats({name, username, avatar}));
   }
 
   return (
-    <button onClick={() => handleClick(user)}>
+    <button onClick={() => handleClick()}>
       <div className="conversation-list-item">
-        <img className="conversation-photo" src={photo} alt="#" />
+        <img className="conversation-photo" src={avatar} alt="#" />
         <div className="conversation-info">
           <h1 className="conversation-title">{ name }</h1>
           {
             text ? 
               <p className="conversation-snippet">{ text }</p>
             :
-            <Fragment></Fragment>
+              <p className="conversation-snippet">@{username}</p>
           }
         </div>
       </div>

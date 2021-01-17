@@ -36,4 +36,4 @@ export default function ConversationSearch() {
       </form>
     </div>
   );
-}
+};

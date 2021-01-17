@@ -29,14 +29,23 @@ export default function ConversationList(props) {
     dispatch(fetchChatsList());
 
     let newConversations = response.chatsList.map(result => {
-      return {
-        photo: "https://randomuser.me/api/portraits/women/12.jpg",
-        name: `${result.name}`,
-        text: `${result.lastmsg}`,
-        user: `${result.username}`,
-      };
+      if (result.lastmsg){
+        return {
+          avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+          name: `${result.name}`,
+          text: `${result.lastmsg}`,
+          username: `${result.username}`,
+        };
+      } else{
+        return {
+          avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+          name: `${result.name}`,
+          username: `${result.username}`,
+          text: false,
+        }
+      }
+      
     });
-
     setConversations([...conversations, ...newConversations]);
   }
 
@@ -48,41 +57,32 @@ export default function ConversationList(props) {
   return (
     <div className="conversation-list">
       {
-        messagesSearch
-        ?
-          <Fragment>
-            <Toolbar
-              title="Messenger"
-              leftItems={[
-                <ToolbarButton key="cog" icon="ion-ios-cog" func={() => dispatch(on('settings'))}/>
-              ]}
-              rightItems={[
-                <ToolbarButton key="add" icon="ion-ios-add-circle-outline" func={()=>toggle(messagesSearch)}/>
-              ]}
-            />
-            <ConversationSearch />
-            {
-              conversations.map(conversation =>
-                <ConversationListItem
-                  key={conversation.name}
-                  data={conversation}
-                />
-              )
-            }
-          </Fragment>
-        :
-          <Fragment>
-            <Toolbar
-                title="Messenger"
-                leftItems={[
-                  <ToolbarButton key="cog" icon="ion-ios-cog" func={() => dispatch(on('settings'))}/>
-                ]}
-                rightItems={[
-                  <ToolbarButton key="add" icon="ion-ios-add-circle-outline" color="red" func={()=>toggle(messagesSearch)}/>
-                ]}
+        <Fragment>
+          <Toolbar
+            title="Messenger"
+            leftItems={[
+              <ToolbarButton key="cog" icon="ion-ios-cog" func={() => dispatch(on('settings'))}/>
+            ]}
+            rightItems={[
+              <ToolbarButton key="add" icon="ion-ios-add-circle-outline" func={()=>toggle(messagesSearch)}/>
+            ]}
+          />
+          {
+            messagesSearch
+            ?
+              <ConversationSearch />
+            :
+              <UsernameSearch />
+          }
+          {
+            conversations.map(conversation =>
+              <ConversationListItem
+                key={conversation.name}
+                data={conversation}
               />
-            <UsernameSearch />
-          </Fragment>
+            )
+          }
+        </Fragment>
       }
     </div>
   );

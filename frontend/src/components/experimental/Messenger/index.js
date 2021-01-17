@@ -10,7 +10,6 @@ import './Messenger.css';
 export default function Messenger(props) {
   const settings = useSelector(state => state.ui.settings);
 
-  console.log(settings);
   return (
     <div className="messenger">
       {/* <Toolbar
