@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from 'react-redux'
 //import { useHistory } from "react-router-dom";
 
 import './MessageList.css';
+import { on } from '../../../redux/ui/uiReducer';
 
 export default function MessageList(props) {
   const dispatch = useDispatch();
@@ -132,7 +133,7 @@ export default function MessageList(props) {
               <Toolbar
                 title= {`${currentConversation.name}`}
                 rightItems={[
-                  <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
+                  <ToolbarButton key="info" icon="ion-ios-information-circle-outline" func={() => dispatch(on('info'))}/>,
                   //<ToolbarButton key="video" icon="ion-ios-videocam" />,
                   //<ToolbarButton key="phone" icon="ion-ios-call" />
                 ]}
@@ -141,7 +142,7 @@ export default function MessageList(props) {
               <div className="message-list-container">{renderMessages()}</div>
 
               <Compose rightItems={[
-                <ToolbarButton key="send" icon="ion-navigate-outline" />,
+                <ToolbarButton key="send" icon="ion-navigate-outline"/>,
                 //<ToolbarButton key="photo" icon="ion-ios-camera" />,
                 //<ToolbarButton key="image" icon="ion-ios-image" />,
                 //<ToolbarButton key="audio" icon="ion-ios-mic" />,

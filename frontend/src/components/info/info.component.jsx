@@ -1,24 +1,21 @@
 import { useSelector } from 'react-redux'
 import { off } from '../../redux/ui/uiReducer.js';
-import { signOut } from '../../redux/user/userReducer.js'
 import { useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
 
 
-import './settings.styles.scss';
 
-const Settings = () => {
-    const history = useHistory();
+import './info.styles.scss';
+
+const Info = () => {
     const dispatch = useDispatch();
-    const { name, username, avatar } = useSelector(state => state.user.profile);
+    const { name, username, avatar } = useSelector(state => state.chat.currentConversation);
 
     return (
         <div className="setting-content">
             <div className="setting-header">
-                <div className="title">Settings</div>
-                <button className="close-btn" onClick={()=> dispatch(off('settings'))}>&#10005;</button>
+                <div className="title">info</div>
+                <button className="close-btn" onClick={()=> dispatch(off('info'))}>&#10005;</button>
             </div>
-
             <div className="setting-info">
                 <div className="profile-pic">
                     <img src={avatar} alt="profile"/>
@@ -34,16 +31,8 @@ const Settings = () => {
                     </div>
                 </div>
             </div>
-
-            <button className="signout-btn" onClick={
-                ()=>{
-                    dispatch(signOut());
-                    dispatch(dispatch(off('settings')));
-                    history.push("/login");
-                }
-            }>Sign out</button>
         </div>
     )
 }
 
-export default Settings;
+export default Info;

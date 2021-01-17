@@ -6,9 +6,11 @@ import Settings from '../../settings/settings.component.jsx';
 import { useSelector } from 'react-redux';
 
 import './Messenger.css';
+import Info from '../../info/info.component';
 
 export default function Messenger(props) {
   const settings = useSelector(state => state.ui.settings);
+  const info = useSelector(state => state.ui.info);
 
   return (
     <div className="messenger">
@@ -43,6 +45,15 @@ export default function Messenger(props) {
           ?
         <div className="setting-container">
           <Settings />
+        </div>
+        :
+        <Fragment></Fragment>
+      }
+      {
+        info
+          ?
+        <div className="setting-container">
+          <Info />
         </div>
         :
         <Fragment></Fragment>
