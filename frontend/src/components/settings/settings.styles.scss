@@ -114,6 +114,7 @@
     @media screen and (max-width: 450px) {
         .setting-content {
             width: 100%;
+            top: unset;
             bottom: 0;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
