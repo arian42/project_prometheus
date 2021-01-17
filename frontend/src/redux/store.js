@@ -6,16 +6,18 @@ import storage from 'redux-persist/lib/storage/session'; // defaults to localSto
 
 import userReducer from './user/userReducer';
 import chatReducer from './chat/chatReducer';
+import uiReducer from './ui/uiReducer';
 
 const persistConfig = {
     key: 'root',
     storage,
-    blacklist: [], //Things u dont
+    blacklist: [], //Things u dont persist
 };
 
 const rootReducer = combineReducers({
     user: userReducer,
     chat: chatReducer,
+    ui: uiReducer,
 });
 
 // Middleware: Redux Persist Persisted Reducer

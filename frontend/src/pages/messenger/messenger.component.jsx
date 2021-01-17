@@ -10,7 +10,6 @@ const Messenger = () => {
         <div className="app">
             <MessengerEx/>
         </div>
-        
     );
 }
 

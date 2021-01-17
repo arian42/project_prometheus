@@ -108,11 +108,7 @@ const userSlice = createSlice({
             username: null,
             avatar: null,
         },
-        userSearch: {
-            name: null,
-            avatar: null,
-            username: null,
-        },
+        userSearch: [],
         status: 'idle',
         error: null,
     },
@@ -124,7 +120,9 @@ const userSlice = createSlice({
                 username: null,
                 avatar: null,
             };
+            state.userSearch = [];
             state.status = 'idle';
+            state.error = null
         },
         nullUserSearch(state, _action) {
             state.userSearch = []
