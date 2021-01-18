@@ -7,7 +7,7 @@
 #url='http://127.0.0.1:5000/api/search'
 #json='{"username": "a"}'
 #
-#url='http://127.0.0.1:5000/api/profile'
+url='http://127.0.0.1:5000/api/profile'
 #
 #
 #url='http://127.0.0.1:5000/api/chat/aryan'
@@ -23,8 +23,9 @@
 #token='x-access-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjU2ODQwNTQ3MiwiZXhwIjoxNjEwODIyNjM3fQ.rSU7toRTbvPqco5lVZjOI2quJtsmSnsG_TuRaimMdgY'
 
 #ALI token>>>
-#token='x-access-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzIzOTc1NzUwNSwiZXhwIjoxNjEwODI1NDQ1fQ.jS_WHZcb3XNd6KDD_Kxi4TRotG7TUBC9QbOsWkMK8xs'
+token='x-access-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NDIwOTY5NjcwLCJleHAiOjE2MTEwODA4NjN9.CYrWi3_c72nOYsZ983eN9iG9mb9R1OkH0peUSWu89Gg'
 
 #curl -X POST -H "$token" -d "$json" $url
-#curl -H "$token" $url
+curl -H "$token" $url
 #curl -d "$json" $url
+#curl -X POST -H "Content-Type: multipart/form-data"  -H "$token" -F "file=@../../default.png" http://127.0.0.1:5000/api/profile

@@ -1,6 +1,6 @@
 #!/bin/python
 from datetime import datetime, timedelta
-from flask import request, jsonify, make_response, Flask
+from flask import request, jsonify, make_response, Flask, send_from_directory
 from functools import wraps
 import jwt
 from pathlib import Path
@@ -11,17 +11,19 @@ import re
 from hashlib import md5  # change this for the love of god
 import time
 from flask_sqlalchemy import SQLAlchemy
-
-# from flask_socketio import SocketIO
+from werkzeug.utils import secure_filename
+import uuid
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'not-that-secret'
 app.config["DEBUG"] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-
+app.config['UPLOAD_FOLDER'] = Path(__file__).parent.absolute() / 'uploads'
+app.config['UPLOAD_EXTENSIONS'] = ('.jpg', '.png', '.gif')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 db = SQLAlchemy(app)
-# socketio = SocketIO(app)
+
 
 
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
@@ -35,6 +37,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(64), nullable=False)
+    image = db.Column(db.String(255), nullable=False, default="default.png")
 
 
 class Chat(db.Model):
@@ -172,27 +175,42 @@ def login():
         return make_response(jsonify({'error': "password and username is required."}), 400)
 
 
+@app.route('/img/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
 @app.route('/api/profile', methods=['GET', 'POST'])
 @token_required
 @cross_origin()
 def profile(user_id, *argv, **kwargs):
     user = User.query.filter_by(id=user_id).first()
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files :
+            return make_response(jsonify({'error': "no file is sent."}), 400)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return make_response(jsonify({'error': "no file is sent."}), 400)
+        if file and file.filename.lower()[-4:] in ('.png', '.jpg'):
+            # filename = secure_filename(file.filename)
+            filename = uuid.uuid4().hex + '.' + file.filename.split('.')[-1].lower()
+            user.image = filename
+            file.save(Path(app.config['UPLOAD_FOLDER'], filename))
+        # # Update other profile pram
+        # d = request.get_json(force=True)
+        # for key in ('username', 'name'):
+        #     if d.get(key):
+        #         user[key] = d.get(key)
+        db.session.commit()
+
     target = {
         'name': user.name,
         'username': user.username,
-        'avatar': "#"
+        'avatar': '/img/' + user.image,
     }
-    from_data = request.get_json(force=True) if request.method == 'POST' else {'hehe!': "hoho"}
-    if from_data.get('username'):
-        user = User.query.filter_by(username=from_data['username'].lower()).first()
-        if user:
-            target = {
-                'name': user.name,
-                'username': user.username,
-                'avatar': "#"
-            }
-        else:
-            return make_response(jsonify({'error': "user not found."}), 400)
     return make_response(jsonify(target), 200)
 
 
@@ -214,18 +232,10 @@ def search(user_id, username=None, *argv, **kwargs):
         obj = {
             'name': user.name,
             'username': user.username,
-            'avatar': "#"
+            'avatar': '/img/' + user.image
         }
         ans.append(obj)
     return make_response(jsonify(ans), 200)
-
-
-def is_friend(user_1, user_2):
-    q = (
-        Chat.query.filter_by(user_s=user_1).filter_by(user_r=user_2).all(),
-        Chat.query.filter_by(user_s=user_2).filter_by(user_r=user_1).all()
-    )
-
 
 
 @app.route('/api/chat/<username>', methods=['GET', 'POST'])
@@ -249,7 +259,7 @@ def chat(user_id, username, *argv, **kwargs):
         # check if they are friends
         friend = Chat.query.filter_by(user_s=user_id).filter_by(user_r=user2.id).first()
         if not friend:
-            # add friends
+            # make them friends
             friend1 = Chat(user_s=user_id, user_r=user2.id, new_msg=1)
             friend2 = Chat(user_r=user_id, user_s=user2.id, new_msg=0)
             db.session.add(friend1)
@@ -282,20 +292,25 @@ def chat(user_id, username, *argv, **kwargs):
                     'timestamp': msg.timestamp
                 }
                 res_d.append(le_msg)
+
+        # WTF is wrong with me?????????????????  HEEEELP
+        res_d = set(res_d)
+        res_d = list(res_d)
+
         res_d.sort(key=lambda x: x['id'], reverse=False)
-        # print(res_d)
         return make_response(jsonify(res_d), 200)
 
 
+@app.route('/api/chats/<sq>', methods=['GET', "POST"])
 @app.route('/api/chats', methods=['GET', "POST"])
 @cross_origin()
 @token_required
-def conversations(user_id, *argv, **kwargs):
+def conversations(user_id, sq=None, *argv, **kwargs):
 
     res = []
     friends = Chat.query\
         .join(User, Chat.user_s == User.id)\
-        .add_columns(User.name, User.username, Chat.user_r, Chat.user_s, Chat.new_msg)\
+        .add_columns(User.name, User.username, User.image, Chat.user_r, Chat.user_s, Chat.new_msg)\
         .filter(Chat.user_r == user_id)
 
     for f in friends:
@@ -331,23 +346,53 @@ def conversations(user_id, *argv, **kwargs):
 
                 lm = why_this_exist()
 
-        p = {
+        res.append({
             'name': f.name,
             'username': f.username,
-            'avatar': "#"
-        }
-        res.append({
-            "profile": p,
+            'avatar': '/img/' + f.image,
             "newmsg": f.new_msg,
             "time": lm.timestamp,
             "lastmsg": lm.message
         })
 
     newlist = sorted(res, key=lambda k: k['time'])
+    # filter query if SQ is provided
+    if sq:
+        for num, item in enumerate(newlist):
+            if sq.lower() not in item['username'].lower():
+                newlist.pop(num)
+
     return make_response(jsonify(newlist), 200)
+
+
+@app.route('/api/delete-msg/<msg_id>', methods=['GET', "POST"])
+@cross_origin()
+@token_required
+def delete_msg(user_id, msg_id, *argv, **kwargs):
+    msg = Message.query.filter_by(id=msg_id).filter_by(sender=user_id).first()
+    if msg:
+        db.session.delete(msg)
+        db.session.commit()
+    else:
+        return make_response(jsonify({'error': "request denied."}), 403)
+
+
+@app.route('/api/delete-update/<msg_id>', methods=["POST"])
+@cross_origin()
+@token_required
+def update_msg(user_id, msg_id, *argv, **kwargs):
+    d = request.get_json(force=True)
+    msg = Message.query.filter_by(id=msg_id).filter_by(sender=user_id).first()
+    if msg and d.get('msg'):
+        msg.message = d['msg']
+        db.session.commit()
+    else:
+        return make_response(jsonify({'error': "request denied."}), 403)
 
 
 if __name__ == '__main__':
     if not Path('test.db').is_file():
         db.create_all()
+    if not Path(app.config['UPLOAD_FOLDER']).exists():
+        Path(app.config['UPLOAD_FOLDER']).mkdir()
     app.run()
