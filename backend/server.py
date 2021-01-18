@@ -24,7 +24,7 @@ app.config['UPLOAD_EXTENSIONS'] = ('.jpg', '.png', '.gif')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 db = SQLAlchemy(app)
 
-
+print(app.config['UPLOAD_FOLDER'])
 
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 FILE_REGEX = re.compile(r"[\w]{100}")
@@ -177,7 +177,7 @@ def login():
 
 @app.route('/img/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename) # as_attachment=True
 
 
 @app.route('/api/profile', methods=['GET', 'POST'])
@@ -257,7 +257,7 @@ def chat(user_id, username, *argv, **kwargs):
         db.session.add(the_msg)
 
         # check if they are friends
-        friend = Chat.query.filter_by(user_s=user_id).filter_by(user_r=user2.id).first()
+        friend = Chat.query.filter_by(user_s=user_id, user_r=user2.id).first()
         if not friend:
             # make them friends
             friend1 = Chat(user_s=user_id, user_r=user2.id, new_msg=1)
@@ -274,14 +274,14 @@ def chat(user_id, username, *argv, **kwargs):
         res_d = []
 
         # set my messages to 0 after view
-        friend = Chat.query.filter_by(user_s=user2.id).filter_by(user_r=user_id).first()
+        friend = Chat.query.filter_by(user_s=user2.id, user_r=user_id).first()
         if friend:
             friend.new_msg = 0
         db.session.commit()
 
         queryies = (
-            Message.query.filter_by(sender=user2.id).filter_by(receive=user_id).all(),
-            Message.query.filter_by(sender=user_id).filter_by(receive=user2.id).all()
+            Message.query.filter_by(sender=user2.id, receive=user_id).all(),
+            Message.query.filter_by(sender=user_id, receive=user2.id).all()
         )
         for messages in queryies:
             for msg in messages:
@@ -292,10 +292,6 @@ def chat(user_id, username, *argv, **kwargs):
                     'timestamp': msg.timestamp
                 }
                 res_d.append(le_msg)
-
-        # WTF is wrong with me?????????????????  HEEEELP
-        res_d = set(res_d)
-        res_d = list(res_d)
 
         res_d.sort(key=lambda x: x['id'], reverse=False)
         return make_response(jsonify(res_d), 200)
@@ -315,14 +311,12 @@ def conversations(user_id, sq=None, *argv, **kwargs):
 
     for f in friends:
         # last message of oposite/other user
-        last_message_o = Message.query.filter_by(sender=f.user_s)\
-            .filter_by(receive=user_id) \
+        last_message_o = Message.query.filter_by(sender=f.user_s, receive=user_id) \
             .order_by(Message.id.desc()).first()
         # .order_by('-id').first()
 
         # my last message
-        last_message_me = Message.query.filter_by(receive=f.user_s)\
-            .filter_by(sender=user_id) \
+        last_message_me = Message.query.filter_by(receive=f.user_s, sender=user_id) \
             .order_by(Message.id.desc()).first()
 
         # this will select newest message bettwin sender and reciver
@@ -369,7 +363,7 @@ def conversations(user_id, sq=None, *argv, **kwargs):
 @cross_origin()
 @token_required
 def delete_msg(user_id, msg_id, *argv, **kwargs):
-    msg = Message.query.filter_by(id=msg_id).filter_by(sender=user_id).first()
+    msg = Message.query.filter_by(id=msg_id, sender=user_id).first()
     if msg:
         db.session.delete(msg)
         db.session.commit()
@@ -382,7 +376,7 @@ def delete_msg(user_id, msg_id, *argv, **kwargs):
 @token_required
 def update_msg(user_id, msg_id, *argv, **kwargs):
     d = request.get_json(force=True)
-    msg = Message.query.filter_by(id=msg_id).filter_by(sender=user_id).first()
+    msg = Message.query.filter_by(id=msg_id, sender=user_id).first()
     if msg and d.get('msg'):
         msg.message = d['msg']
         db.session.commit()
