@@ -1,7 +1,7 @@
 export const toggleBoolean = (value) => {
     if (value) {
-        value = false
+        return false
     } else {
-        value = true
+        return true
     }
 };

@@ -10,16 +10,19 @@ export default function ConversationListItem(props) {
 
   useEffect(() => {
     shave('.conversation-snippet', 20);
-  })
+  });
 
-  let { username, avatar, name, text } = props.data;
-  console.log(username, name, avatar, text);
+  // // eslint-disable-next-line no-unused-vars
+  // let { profile, lastmsg, newmsg } = props.data;
+  // const {username, name, avatar} = profile;
   const dispatch = useDispatch();
 
+  const  { username, name, avatar, lastmsg, newmsg } = props.data;
+
   const handleClick = () => {
-    dispatch(setConversation({name, username, avatar}));
-    dispatch(fetchChats({name, username, avatar}));
-  }
+    dispatch(setConversation({avatar, name, username}));
+    dispatch(fetchChats(username));
+  };
 
   return (
     <button onClick={() => handleClick()}>
@@ -28,8 +31,8 @@ export default function ConversationListItem(props) {
         <div className="conversation-info">
           <h1 className="conversation-title">{ name }</h1>
           {
-            text ? 
-              <p className="conversation-snippet">{ text }</p>
+            lastmsg ? 
+              <p className="conversation-snippet">{ lastmsg }</p>
             :
               <p className="conversation-snippet">@{username}</p>
           }

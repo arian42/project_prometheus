@@ -15,6 +15,7 @@ export default function ConversationSearch() {
   }, [person, dispatch]);
   
   const handleChange = event => {
+    console.log(event.target.value);
     setPerson(event.target.value);
   }
 

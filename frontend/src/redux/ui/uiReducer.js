@@ -13,11 +13,11 @@ const uiSlice = createSlice({
     reducers: {
         toggle(state, action) {
             if (action.payload === 'settings') {
-                toggleBoolean(state.settings);
+                state.settings = toggleBoolean(state.settings);
             } else if (action.payload === 'info') {
-                toggleBoolean(state.info);
+                state.info = toggleBoolean(state.info);
             } else if (action.payload === 'usernameSearch') {
-                toggleBoolean(state.usernameSearch);
+                state.usernameSearch = toggleBoolean(state.usernameSearch);
             }
         },
         on(state, action) {
