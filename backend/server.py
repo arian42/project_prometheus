@@ -207,7 +207,7 @@ def profile(user_id, *argv, **kwargs):
     return make_response(jsonify(target), 200)
 
 
-@app.route('/api/profile-update', methods=['POST'])
+@app.route('/api/profile-img', methods=['POST'])
 @token_required
 @cross_origin()
 def profile_upload(user_id, *argv, **kwargs):
@@ -240,6 +240,27 @@ def profile_upload(user_id, *argv, **kwargs):
     return make_response(jsonify(target), 200)
 
 
+@app.route('/api/profile-update', methods=['POST'])
+@token_required
+@cross_origin()
+def profile_update(user_id, *argv, **kwargs):
+    user = User.query.filter_by(id=user_id).first()
+    d = request.get_json(force=True)
+
+    if d.get('username'):
+        user.username = d.get('username').lower()
+    if d.get('name'):
+        user.username = d['name']
+    db.session.commit()
+
+    target = {
+        'name': user.name,
+        'username': user.username,
+        'avatar': URL + '/img/' + user.image,
+    }
+    return make_response(jsonify(target), 200)
+
+
 @app.route('/api/search/<username>', methods=['GET'])
 @app.route('/api/search', methods=['POST', 'GET'])
 @cross_origin()
@@ -253,7 +274,7 @@ def search(user_id, username=None, *argv, **kwargs):
         username = request.args.get('username').lower()
 
     search_q = "%{}%".format(username)
-    users = User.query.filter(User.username.like(search_q) | User.name.like(search_q) | User.email.like(search_q)).all()
+    users = User.query.filter(User.username.like(search_q) | User.name.like(search_q)).all()
     for user in users:
         if user.id == user_id:
             continue
