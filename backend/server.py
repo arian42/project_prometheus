@@ -14,6 +14,9 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import uuid
 
+
+URL = 'http://127.0.0.1:5000'
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'not-that-secret'
@@ -188,7 +191,7 @@ def profile(user_id, *argv, **kwargs):
     target = {
         'name': user.name,
         'username': user.username,
-        'avatar': '/img/' + user.image,
+        'avatar': URL + '/img/' + user.image,
     }
     from_data = request.get_json(force=True) if request.method == 'POST' else {'hehe!': "hoho"}
     if from_data.get('username'):
@@ -197,7 +200,7 @@ def profile(user_id, *argv, **kwargs):
             target = {
                 'name': user.name,
                 'username': user.username,
-                'avatar': "#"
+                'avatar': URL + '/img/' + user.image
             }
         else:
             return make_response(jsonify({'error': "user not found."}), 400)
@@ -232,7 +235,7 @@ def profile_upload(user_id, *argv, **kwargs):
     target = {
         'name': user.name,
         'username': user.username,
-        'avatar': '/img/' + user.image,
+        'avatar': URL + '/img/' + user.image,
     }
     return make_response(jsonify(target), 200)
 
@@ -257,7 +260,7 @@ def search(user_id, username=None, *argv, **kwargs):
         obj = {
             'name': user.name,
             'username': user.username,
-            'avatar': '/img/' + user.image
+            'avatar': URL + '/img/' + user.image
         }
         ans.append(obj)
     return make_response(jsonify(ans), 200)
@@ -372,7 +375,7 @@ def conversations(user_id, sq=None, *argv, **kwargs):
         res.append({
             'name': le_user.name,
             'username': le_user.username,
-            'avatar': '/img/' + le_user.image,
+            'avatar': URL + '/img/' + le_user.image,
             "newmsg": f.new_msg,
             "time": lm.timestamp,
             "lastmsg": lm.message
