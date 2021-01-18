@@ -185,26 +185,49 @@ def uploaded_file(filename):
 @cross_origin()
 def profile(user_id, *argv, **kwargs):
     user = User.query.filter_by(id=user_id).first()
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files :
-            return make_response(jsonify({'error': "no file is sent."}), 400)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            return make_response(jsonify({'error': "no file is sent."}), 400)
-        if file and file.filename.lower()[-4:] in ('.png', '.jpg'):
-            # filename = secure_filename(file.filename)
-            filename = uuid.uuid4().hex + '.' + file.filename.split('.')[-1].lower()
-            user.image = filename
-            file.save(Path(app.config['UPLOAD_FOLDER'], filename))
-        # # Update other profile pram
-        # d = request.get_json(force=True)
-        # for key in ('username', 'name'):
-        #     if d.get(key):
-        #         user[key] = d.get(key)
-        db.session.commit()
+    target = {
+        'name': user.name,
+        'username': user.username,
+        'avatar': '/img/' + user.image,
+    }
+    from_data = request.get_json(force=True) if request.method == 'POST' else {'hehe!': "hoho"}
+    if from_data.get('username'):
+        user = User.query.filter_by(username=from_data['username'].lower()).first()
+        if user:
+            target = {
+                'name': user.name,
+                'username': user.username,
+                'avatar': "#"
+            }
+        else:
+            return make_response(jsonify({'error': "user not found."}), 400)
+    return make_response(jsonify(target), 200)
+
+
+@app.route('/api/profile-update', methods=['POST'])
+@token_required
+@cross_origin()
+def profile_upload(user_id, *argv, **kwargs):
+    user = User.query.filter_by(id=user_id).first()
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return make_response(jsonify({'error': "no file is sent."}), 400)
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        return make_response(jsonify({'error': "no file is sent."}), 400)
+    if file and file.filename.lower()[-4:] in ('.png', '.jpg'):
+        # filename = secure_filename(file.filename)
+        filename = uuid.uuid4().hex + '.' + file.filename.split('.')[-1].lower()
+        user.image = filename
+        file.save(Path(app.config['UPLOAD_FOLDER'], filename))
+    # Update other profile pram
+    d = request.get_json(force=True)
+    for key in ('username', 'name'):
+        if d.get(key):
+            user[key] = d.get(key)
+    db.session.commit()
 
     target = {
         'name': user.name,
@@ -229,6 +252,8 @@ def search(user_id, username=None, *argv, **kwargs):
     search_q = "%{}%".format(username)
     users = User.query.filter(User.username.like(search_q) | User.name.like(search_q) | User.email.like(search_q)).all()
     for user in users:
+        if user.id == user_id:
+            continue
         obj = {
             'name': user.name,
             'username': user.username,
@@ -279,19 +304,26 @@ def chat(user_id, username, *argv, **kwargs):
             friend.new_msg = 0
         db.session.commit()
 
-        queryies = (
-            Message.query.filter_by(sender=user2.id, receive=user_id).all(),
-            Message.query.filter_by(sender=user_id, receive=user2.id).all()
-        )
-        for messages in queryies:
-            for msg in messages:
-                le_msg = {
-                    'id': msg.id,
-                    'author': user2.username if user_id != msg.sender else "You",
-                    'message': msg.message,
-                    'timestamp': msg.timestamp
-                }
-                res_d.append(le_msg)
+        messages = Message.query.filter_by(sender=user_id, receive=user2.id).all()
+        my_fucking_username = User.query.filter_by(id=user_id).first()
+        for msg in messages:
+            le_msg = {
+                'id': msg.id,
+                'author': my_fucking_username.username,
+                'message': msg.message,
+                'timestamp': msg.timestamp
+            }
+            res_d.append(le_msg)
+
+        messages = Message.query.filter_by(sender=user2.id, receive=user_id).all()
+        for msg in messages:
+            le_msg = {
+                'id': msg.id,
+                'author': user2.username,
+                'message': msg.message,
+                'timestamp': msg.timestamp
+            }
+            res_d.append(le_msg)
 
         res_d.sort(key=lambda x: x['id'], reverse=False)
         return make_response(jsonify(res_d), 200)
@@ -306,7 +338,7 @@ def conversations(user_id, sq=None, *argv, **kwargs):
     res = []
     friends = Chat.query\
         .join(User, Chat.user_s == User.id)\
-        .add_columns(User.name, User.username, User.image, Chat.user_r, Chat.user_s, Chat.new_msg)\
+        .add_columns(User.id, User.name, User.username, User.image, Chat.user_r, Chat.user_s, Chat.new_msg)\
         .filter(Chat.user_r == user_id)
 
     for f in friends:
@@ -339,7 +371,8 @@ def conversations(user_id, sq=None, *argv, **kwargs):
                         self.message = "-- Removed --"
 
                 lm = why_this_exist()
-
+        if f.id == user_id:
+            pass
         res.append({
             'name': f.name,
             'username': f.username,
