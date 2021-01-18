@@ -66,38 +66,38 @@ export const profile = createAsyncThunk('user/profile', async (_, { getState } )
     return fetchedData;
 });
 
-export const conversationProfile = createAsyncThunk('user/profile', async (_, { getState } ) => {
-    const {userSearch, token} = getState().user;
-    const username = userSearch.username;
+// export const conversationProfile = createAsyncThunk('user/profile', async (_, { getState } ) => {
+//     const {userSearch, token} = getState().user;
+//     const username = userSearch.username;
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
-        method: 'POST',
-        body: JSON.stringify({
-            'username': `${username}`,
-            'token': `${token}`,
-        })
-    });
+//     const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
+//         method: 'POST',
+//         body: JSON.stringify({
+//             'username': `${username}`,
+//             'token': `${token}`,
+//         })
+//     });
 
-    const fetchedData = await fetchedJson.json();
+//     const fetchedData = await fetchedJson.json();
 
-    return fetchedData;
-});
+//     return fetchedData;
+// });
 
-export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
-    const {token} = getState().user;
+// export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
+//     const {token} = getState().user;
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
-        method: 'POST',
-        body: JSON.stringify({
-            'username': `${person}`,
-            'token': `${token}`,
-        })
-    });
+//     const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
+//         method: 'POST',
+//         body: JSON.stringify({
+//             'username': `${person}`,
+//             'token': `${token}`,
+//         })
+//     });
 
-    const fetchedData = await fetchedJson.json();
+//     const fetchedData = await fetchedJson.json();
 
-    return fetchedData;
-});
+//     return fetchedData;
+// });
 
 const userSlice = createSlice({
     name: 'user',
@@ -108,7 +108,6 @@ const userSlice = createSlice({
             username: null,
             avatar: null,
         },
-        userSearch: [],
         status: 'idle',
         error: null,
     },
@@ -120,13 +119,9 @@ const userSlice = createSlice({
                 username: null,
                 avatar: null,
             };
-            state.userSearch = [];
             state.status = 'idle';
             state.error = null
         },
-        nullUserSearch(state, _action) {
-            state.userSearch = []
-        }
     },
     extraReducers: {
         [signUp.pending]: (state, _action) => {
@@ -168,32 +163,32 @@ const userSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         },
-        [profileSearch.pending]: (state, _action) => {
-            state.status = 'loading'
-        },
-        [profileSearch.fulfilled]: (state, action) => {
-            state.status = 'succeeded';
-            state.userSearch = action.payload;
-        },
-        [profileSearch.rejected]: (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        },
-        [conversationProfile.pending]: (state, _action) => {
-            state.status = 'loading'
-        },
-        [conversationProfile.fulfilled]: (state, action) => {
-            state.status = 'succeeded';
-            state.userSearch = action.payload;
-        },
-        [conversationProfile.rejected]: (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        },
+        // [profileSearch.pending]: (state, _action) => {
+        //     state.status = 'loading'
+        // },
+        // [profileSearch.fulfilled]: (state, action) => {
+        //     state.status = 'succeeded';
+        //     state.userSearch = action.payload;
+        // },
+        // [profileSearch.rejected]: (state, action) => {
+        //     state.status = 'failed';
+        //     state.error = action.error.message;
+        // },
+        // [conversationProfile.pending]: (state, _action) => {
+        //     state.status = 'loading'
+        // },
+        // [conversationProfile.fulfilled]: (state, action) => {
+        //     state.status = 'succeeded';
+        //     state.userSearch = action.payload;
+        // },
+        // [conversationProfile.rejected]: (state, action) => {
+        //     state.status = 'failed';
+        //     state.error = action.error.message;
+        //},
     }
 });
 
 
 export default userSlice.reducer;
 
-export const { signOut, nullUserSearch } = userSlice.actions;
+export const { signOut } = userSlice.actions;

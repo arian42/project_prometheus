@@ -4,55 +4,33 @@ import UsernameSearch from '../UsernameSearch';
 import ConversationListItem from '../ConversationListItem';
 import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
-import { fetchChatsList } from '../../../redux/chat/chatReducer';
-import {nullUserSearch} from '../../../redux/user/userReducer';
-import { on } from '../../../redux/ui/uiReducer'
+import { fetchChatsList, nullChatsList } from '../../../redux/chat/chatReducer';
+import { on, toggle } from '../../../redux/ui/uiReducer'
 import { useDispatch, useSelector } from 'react-redux';
 
 import './ConversationList.css';
 
-export default function ConversationList(props) {
-  const [conversations, setConversations] = useState([]);
-  const [messagesSearch, setMessagesSearch] = useState(true);
-
+export default function ConversationList() {
   const dispatch = useDispatch();
-  const response = useSelector(state => state.chat);
+  const chatsList = useSelector(state => state.chat.chatsList);
+  const  usernameSearch = useSelector(state => state.ui.usernameSearch);
 
-  const toggle = (value) => {
-    if (value === false) {
-      dispatch(nullUserSearch());
-    }
-    setMessagesSearch( value ? false : true);
-  }
-
-  const getConversations = () => {
-    dispatch(fetchChatsList());
-
-    let newConversations = response.chatsList.map(result => {
-      if (result.lastmsg){
-        return {
-          avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-          name: `${result.name}`,
-          text: `${result.lastmsg}`,
-          username: `${result.username}`,
-        };
-      } else{
-        return {
-          avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-          name: `${result.name}`,
-          username: `${result.username}`,
-          text: false,
-        }
-      }
-      
-    });
-    setConversations([...conversations, ...newConversations]);
-  }
+  const togglePrimary = () => {
+    dispatch(toggle('usernameSearch'));
+    dispatch(nullChatsList());
+    
+  };
 
   useEffect(() => {
-    getConversations();
-    // eslint-disable-next-line
-  },[]);
+    const intervalId = setInterval( () => {
+      if(!usernameSearch) {
+        dispatch(fetchChatsList());
+      }
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  });
+ 
 
   return (
     <div className="conversation-list">
@@ -64,20 +42,20 @@ export default function ConversationList(props) {
               <ToolbarButton key="cog" icon="ion-ios-cog" func={() => dispatch(on('settings'))}/>
             ]}
             rightItems={[
-              <ToolbarButton key="add" icon="ion-ios-add-circle-outline" func={()=>toggle(messagesSearch)}/>
+              <ToolbarButton key="add" icon="ion-ios-add-circle-outline" func={()=>togglePrimary()}/>
             ]}
           />
           {
-            messagesSearch
+            !usernameSearch
             ?
               <ConversationSearch />
             :
               <UsernameSearch />
           }
           {
-            conversations.map(conversation =>
+            chatsList.map(conversation =>
               <ConversationListItem
-                key={conversation.name}
+                key={conversation.username}
                 data={conversation}
               />
             )

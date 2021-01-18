@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 //import { io } from 'socket.io-client';
 
-export const fetchChats = createAsyncThunk('chat/fetchChats', async (username, { dispatch, getState }) => {
+export const fetchChats = createAsyncThunk('chat/fetchChats', async (username, { getState }) => {
     const {token} = getState().user;
     
     let fetchedChat = await fetch(`http://127.0.0.1:5000/api/chat/${username}`, {
@@ -95,22 +95,24 @@ const chatSlice = createSlice({
         error: null,
     },
     reducers: {
-        update(state, action) {
-            if(action.payload !== null) {
-                state.chatsList = [...state.chatsList, ...action.payload.chatsList];
-                state.chats = [...state.chats, ...action.payload.chats];
-            }else{
-                state.status = "chatSocket worked"
-            }
-        },
+        // update(state, action) {
+        //     if(action.payload !== null) {
+        //         state.chatsList = [...state.chatsList, ...action.payload.chatsList];
+        //         state.chats = [...state.chats, ...action.payload.chats];
+        //     }else{
+        //         state.status = "chatSocket worked"
+        //     }
+        // },
         setConversation(state, action) {
-            console.log(action.payload);
             state.currentConversation = {
                 name: action.payload.name,
                 username: action.payload.username,
                 avatar: action.payload.avatar,
             }
         },
+        nullChatsList(state) {
+            state.chatsList = [];
+        }
     },
     extraReducers: {
         [fetchChats.pending]: (state, action) => {
@@ -158,4 +160,4 @@ const chatSlice = createSlice({
 
 export default chatSlice.reducer;
 
-export const { setConversation } = chatSlice.actions;
+export const { setConversation, nullChatsList } = chatSlice.actions;
