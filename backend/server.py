@@ -334,13 +334,8 @@ def chat(user_id, username, *argv, **kwargs):
 @cross_origin()
 @token_required
 def conversations(user_id, sq=None, *argv, **kwargs):
-
     res = []
-    friends = Chat.query\
-        .join(User, Chat.user_s == User.id)\
-        .add_columns(User.id, User.name, User.username, User.image, Chat.user_r, Chat.user_s, Chat.new_msg)\
-        .filter(Chat.user_r == user_id)
-
+    friends = Chat.query.filter_by(user_r=user_id)
     for f in friends:
         # last message of oposite/other user
         last_message_o = Message.query.filter_by(sender=f.user_s, receive=user_id) \
@@ -361,7 +356,7 @@ def conversations(user_id, sq=None, *argv, **kwargs):
             # one of them is null
             if last_message_o:
                 lm = last_message_o
-            elif last_message_me :
+            elif last_message_me:
                 lm = last_message_me
             else:
                 # this should not happen normally
@@ -369,14 +364,15 @@ def conversations(user_id, sq=None, *argv, **kwargs):
                     def __init__(self):
                         self.timestamp = ""
                         self.message = "-- Removed --"
-
                 lm = why_this_exist()
-        if f.id == user_id:
-            pass
+
+        if f.user_s == user_id:
+            continue
+        le_user = User.query.filter_by(id=f.user_s).first()
         res.append({
-            'name': f.name,
-            'username': f.username,
-            'avatar': '/img/' + f.image,
+            'name': le_user.name,
+            'username': le_user.username,
+            'avatar': '/img/' + le_user.image,
             "newmsg": f.new_msg,
             "time": lm.timestamp,
             "lastmsg": lm.message
