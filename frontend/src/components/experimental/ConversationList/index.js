@@ -26,7 +26,7 @@ export default function ConversationList() {
       if(!usernameSearch) {
         dispatch(fetchChatsList());
       }
-    }, 10000);
+    }, 1000);
 
     return () => clearInterval(intervalId);
   });

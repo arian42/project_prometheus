@@ -36,6 +36,7 @@ export default function ConversationListItem(props) {
             :
               <p className="conversation-snippet">@{username}</p>
           }
+          <p className="new-messages">{newmsg}</p>
         </div>
       </div>
     </button>
