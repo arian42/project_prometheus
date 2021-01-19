@@ -13,7 +13,7 @@ const Info = () => {
     return (
         <div className="setting-content">
             <div className="setting-header">
-                <div className="title">info</div>
+                <div className="title">Profile</div>
                 <button className="close-btn" onClick={()=> dispatch(off('info'))}>&#10005;</button>
             </div>
             <div className="setting-info">

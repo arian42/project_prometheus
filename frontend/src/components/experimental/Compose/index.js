@@ -54,9 +54,7 @@ export default function Compose(props) {
           label="message"
         />
       </form>
-      {
-        props.rightItems
-      }
+      <div className="send-btn icon-send"></div>
     </div>
   );
 }

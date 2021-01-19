@@ -20,7 +20,7 @@
         width:380px;
         background-color: #fff;
         border-radius: 10px;
-        padding: 20px;
+        padding: 20px 20px 40px;
 
         display: flex;
         flex-direction: column;
@@ -94,7 +94,7 @@
         
         .signout-btn {
             margin-top:40px;
-            margin-bottom: 20px;
+            // margin-bottom: 20px;
             border: none;
             background-color: #ddd;
             border-radius: 10px;

@@ -28,14 +28,14 @@ $darkText : #000d1c;
         .github_link {
             color:$darkText ;
 
-            .icon-icon_github {
+            .icon-github {
                 font-size: 33px;
                 color: #00356e;
                 transition:all .2s ease-in-out;
             }
 
             &:hover {
-                .icon-icon_github {
+                .icon-github {
                     color: #007AFF;
                 }
             }

@@ -25,7 +25,7 @@ export default function ConversationListItem(props) {
   };
 
   return (
-    <button onClick={() => handleClick()}>
+    <button className="conversation-list-btn" onClick={() => handleClick()}>
       <div className="conversation-list-item">
         <img className="conversation-photo" src={avatar} alt="#" />
         <div className="conversation-info">

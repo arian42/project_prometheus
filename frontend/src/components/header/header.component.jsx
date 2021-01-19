@@ -12,7 +12,7 @@ const Header = () => (
             </div>
             <div className="github_link">
                 <a href="https://github.com/arian42/project_prometheus" target="blank">
-                    <span className="icon-icon_github"></span>
+                    <span className="icon-github"></span>
                 </a>
             </div>
         </div>
