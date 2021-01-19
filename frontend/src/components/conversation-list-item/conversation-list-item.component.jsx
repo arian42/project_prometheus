@@ -24,6 +24,10 @@ export default function ConversationListItem(props) {
     dispatch(fetchChats(username));
   };
 
+  if (newmsg=== '0'){
+    var showNewMessage='';
+  }
+
   return (
     <button className="conversation-list-btn" onClick={() => handleClick()}>
       <div className="conversation-list-item">
@@ -34,7 +38,12 @@ export default function ConversationListItem(props) {
             lastmsg ? 
               <Fragment>
                 <p className="conversation-snippet">{ lastmsg }</p>
-                <p className="new-messages">{newmsg}</p>
+                {
+                  showNewMessage ?
+                    <p className="new-messages">{newmsg}</p>
+                  :
+                    <Fragment></Fragment>
+                }
               </Fragment>
             :
               <p className="conversation-snippet">@{username}</p>
