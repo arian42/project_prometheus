@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import shave from 'shave';
 
@@ -32,11 +32,13 @@ export default function ConversationListItem(props) {
           <h1 className="conversation-title">{ name }</h1>
           {
             lastmsg ? 
-              <p className="conversation-snippet">{ lastmsg }</p>
+              <Fragment>
+                <p className="conversation-snippet">{ lastmsg }</p>
+                <p className="new-messages">{newmsg}</p>
+              </Fragment>
             :
               <p className="conversation-snippet">@{username}</p>
           }
-          <p className="new-messages">{newmsg}</p>
         </div>
       </div>
     </button>
