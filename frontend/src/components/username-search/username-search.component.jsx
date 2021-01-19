@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import './UsernameSearch.scss';
 import { useDispatch } from 'react-redux';
 
 //import { profileSearch } from '../../../redux/user/userReducer';
-import { profileSearch } from '../../../redux/chat/chatReducer';
+import { profileSearch } from '../../redux/chat/chatReducer';
+
+import './username-search.styles.scss';
 
 export default function ConversationSearch() {
   const [person, setPerson] = useState("");

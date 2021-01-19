@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import './ConversationSearch.css';
 import { 
   //useDispatch
 } from 'react-redux';
+
+import './conversation-search.styles.scss';
 
 export default function ConversationSearch() {
   const [Conversation, setConversation] = useState("");

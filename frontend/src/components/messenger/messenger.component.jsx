@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
-import ConversationList from '../ConversationList';
-import MessageList from '../MessageList';
-import Settings from '../../settings/settings.component.jsx';
+import ConversationList from '../conversation-list/conversation-list.component';
+import MessageList from '../message-list/message-list.component';
+import Settings from '../settings/settings.component.jsx';
 
 import { useSelector } from 'react-redux';
 
-import './Messenger.css';
-import Info from '../../info/info.component';
+import './messenger.styles.scss';
+import Info from '../info/info.component';
 
 export default function Messenger(props) {
   const settings = useSelector(state => state.ui.settings);

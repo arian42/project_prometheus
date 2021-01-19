@@ -1,14 +1,14 @@
-import {Fragment,useState, useEffect} from 'react';
-import ConversationSearch from '../ConversationSearch';
-import UsernameSearch from '../UsernameSearch';
-import ConversationListItem from '../ConversationListItem';
-import Toolbar from '../Toolbar';
-import ToolbarButton from '../ToolbarButton';
-import { fetchChatsList, nullChatsList } from '../../../redux/chat/chatReducer';
-import { on, toggle } from '../../../redux/ui/uiReducer'
+import {Fragment, useEffect} from 'react';
+import ConversationSearch from '../conversation-search/conversation-search.component';
+import UsernameSearch from '../username-search/username-search.component';
+import ConversationListItem from '../conversation-list-item/conversation-list-item.component';
+import Toolbar from '../toolbar/toolbar.component';
+import ToolbarButton from '../toolbar-button/toolbar-button.component';
+import { fetchChatsList, nullChatsList } from '../../redux/chat/chatReducer';
+import { on, toggle } from '../../redux/ui/uiReducer'
 import { useDispatch, useSelector } from 'react-redux';
 
-import './ConversationList.css';
+import './conversation-list.styles.scss';
 
 export default function ConversationList() {
   const dispatch = useDispatch();

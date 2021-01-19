@@ -1,6 +1,6 @@
 //import Chat from '../../components/chat/chat.component';
 
-import MessengerEx from '../../components/experimental/Messenger';
+import MessengerEx from '../../components/messenger/messenger.component';
 
 import './messenger.styles.scss';
 

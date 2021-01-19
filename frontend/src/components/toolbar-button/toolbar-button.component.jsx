@@ -1,5 +1,5 @@
 import React from 'react';
-import './ToolbarButton.css';
+import './toolbar-button.styles.scss';
 
 export default function ToolbarButton(props) {
     const { icon } = props;

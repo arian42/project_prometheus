@@ -5,19 +5,20 @@ import React,
     Fragment
   } from 'react';
 
-import { fetchChats } from '../../../redux/chat/chatReducer';
+import { fetchChats } from '../../redux/chat/chatReducer';
 
-import Spinner from '../../spinner/spinner.component.jsx';
-import Compose from '../Compose';
-import Toolbar from '../Toolbar';
-import ToolbarButton from '../ToolbarButton';
-import Message from '../Message';
+import Spinner from '../spinner/spinner.component.jsx';
+import Compose from '../compose/compose.component';
+import Toolbar from '../toolbar/toolbar.component';
+import ToolbarButton from '../toolbar-button/toolbar-button.component';
+import Message from '../message/message.component';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux'
 //import { useHistory } from "react-router-dom";
+import { on } from '../../redux/ui/uiReducer';
 
-import './MessageList.css';
-import { on } from '../../../redux/ui/uiReducer';
+import './message-list.styles.scss';
+
 
 export default function MessageList(props) {
   const dispatch = useDispatch();

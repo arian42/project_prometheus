@@ -2,9 +2,9 @@ import React, {Fragment, useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import shave from 'shave';
 
-import { fetchChats, setConversation } from '../../../redux/chat/chatReducer.js';
+import { fetchChats, setConversation } from '../../redux/chat/chatReducer.js';
 
-import './ConversationListItem.css';
+import './conversation-list-item.styles.scss';
 
 export default function ConversationListItem(props) {
 

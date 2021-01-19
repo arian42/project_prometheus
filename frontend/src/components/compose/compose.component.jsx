@@ -3,9 +3,9 @@ import {
   useSelector,
   useDispatch
 } from 'react-redux';
-import { sendMessage as sendMyMessage } from '../../../redux/chat/chatReducer';
+import { sendMessage as sendMyMessage } from '../../redux/chat/chatReducer';
 
-import './Compose.css';
+import './compose.styles.scss';
 
 export default function Compose(props) {
   const currentConversation = useSelector( state => state.chat.currentConversation.username);

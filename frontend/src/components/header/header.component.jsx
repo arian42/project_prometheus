@@ -1,7 +1,7 @@
 import { Link } from 'react-scroll'
 
-import Prometheus from '../../../src/resource/prometheus.png';
-import Logo from '../../../src/resource/logo-flame.png';
+import Prometheus from '../../resources/prometheus.png';
+import Logo from '../../resources/logo-flame.png';
 import './header.styles.scss';
 
 const Header = () => (
