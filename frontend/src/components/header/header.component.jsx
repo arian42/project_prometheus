@@ -1,7 +1,7 @@
 import { Link } from 'react-scroll'
 
-import Prometheus from '../../../src/resource/prometheus.png';
-import Logo from '../../../src/resource/logo-flame.png';
+import Prometheus from '../../resources/prometheus.png';
+import Logo from '../../resources/logo-flame.png';
 import './header.styles.scss';
 
 const Header = () => (
@@ -12,7 +12,7 @@ const Header = () => (
             </div>
             <div className="github_link">
                 <a href="https://github.com/arian42/project_prometheus" target="blank">
-                    <span className="icon-icon_github"></span>
+                    <span className="icon-github"></span>
                 </a>
             </div>
         </div>
@@ -25,7 +25,7 @@ const Header = () => (
                     to="scrollhere"
                     spy={true}
                     smooth={true}
-                    //offset={-70}
+                    offset={10}
                     duration={700}
                 >Start Messaging</Link>
             </div>

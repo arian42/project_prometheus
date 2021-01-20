@@ -1,0 +1,80 @@
+.compose {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-top: 1px solid #eeeef1;
+  position: fixed;
+  width: calc(100% - 350px);
+  bottom: 0px;
+  left: 350px;
+}
+
+@media screen and (max-width: 960px) {
+  .compose {
+    width: calc(70%);
+    left: 30%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .compose {
+    width: 100%;
+    left: 0;
+  }
+}
+
+@supports (backdrop-filter: blur(20px)) {
+  .compose {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+  }
+}
+
+.compose > form {
+  width:100%;
+  margin-right: 10px;
+}
+
+.compose-input {
+  flex: 1;
+  border: none;
+  font-size: 14px;
+  height: 40px;
+  background: #f4f4f8;
+  width: 100%;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+.compose-input:focus {
+  outline: none;
+}
+
+.compose-input::placeholder {
+  /* opacity: 0.3; */
+}
+
+.compose .toolbar-button {
+  color: #bbbbbf;
+  margin-right: 15px;
+  padding-right: 10px;
+}
+
+.compose .toolbar-button:hover {
+  color: #99999c;
+  padding-right: 10px;
+}
+
+.compose .send-btn {
+  font-size: 28px;
+  color: #007aff;
+  font-weight: 600;
+}
+
+.compose .send-btn:hover {
+  cursor: pointer;
+  color: #0063ce;
+}
+

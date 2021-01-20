@@ -25,9 +25,14 @@
                 width: 280px;
                 height: 100%;
                 position: fixed;
-                left: 0;
+                left: -300px;
                 top: 0;
                 z-index: 2;
+                box-shadow: 1px 0px 12px 1px #00000040;
+                transition: left .3s ease-in-out;
+                &.open {
+                    left: 0;
+                }
             }
             .content {
                 width: 100%;
@@ -36,6 +41,10 @@
         @media screen and (max-width: 375px) {
             .sidebar {
                 width: 100%;
+                left: calc(-100% - 20px);
+                &.open {
+                    left: 0;
+                }
             }
         }
     }

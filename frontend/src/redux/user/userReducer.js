@@ -54,7 +54,7 @@ export const profile = createAsyncThunk('user/profile', async (_, { getState } )
     const {username,token} = getState().user;
 
     const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
-        method: 'POST',
+        method: 'GET',
         body: JSON.stringify({
             'username': `${username}`,
             'token': `${token}`,
