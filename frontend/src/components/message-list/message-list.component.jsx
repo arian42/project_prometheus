@@ -140,7 +140,7 @@ export default function MessageList(props) {
                   //<ToolbarButton key="phone" icon="ion-ios-call" />
                 ]}
                 leftItems={[
-                  //add ".close" class on click
+                  //add ".close" class on click to sidebar (../messenger.component.jsx)
                   <ToolbarButton key="menu" icon="ion-ios-menu" func={() => dispatch(on('info'))}/>,
                 ]}
               />
