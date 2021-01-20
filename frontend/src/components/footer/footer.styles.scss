@@ -10,4 +10,8 @@
         font-size: 14px;
         color: #000d1c;
     }
+    @media screen and (max-width: 768px) {
+        position: unset;
+        z-index: unset;
+    }
 }
