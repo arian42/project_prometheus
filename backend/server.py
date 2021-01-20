@@ -184,14 +184,22 @@ def uploaded_file(filename):
 
 
 @app.route('/')
-@app.route('/static/<folder>/<file>')
-def serve(folder, file):
+@app.route('/<file>')
+def serve(file):
     # this is for front end
     the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
-    if folder and file:
-        return send_from_directory(the_p / folder, file)
+    if file:
+        return send_from_directory(the_p, file)
     else:
         return send_from_directory(the_p, 'index.html')
+
+
+@app.route('/static/<folder>/<file>')
+def serve_static(folder, file):
+    # this is for front end
+    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
+    return send_from_directory(the_p / folder, file)
+
 
 
 @app.route('/api/profile', methods=['GET', 'POST'])
