@@ -183,14 +183,13 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  # as_attachment=True
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
+@app.route('/')
+@app.route('/static/<folder>/<file>')
+def serve(folder, file):
     # this is for front end
     the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
-    le_path = the_p / path
-    if path != "" and le_path.exists():
-        return send_from_directory(le_path.parent, le_path.name)
+    if folder and file:
+        return send_from_directory(the_p / folder, file)
     else:
         return send_from_directory(the_p, 'index.html')
 
