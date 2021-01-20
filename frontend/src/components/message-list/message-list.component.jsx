@@ -58,7 +58,7 @@ export default function MessageList(props) {
 
       const intervalId = setInterval(() => {
           dispatch(fetchChats(username));
-      }, 100);
+      }, 300);
 
       return () => clearInterval(intervalId);
     }
