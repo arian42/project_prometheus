@@ -187,7 +187,7 @@ def uploaded_file(filename):
 @app.route('/<tfile>')
 def serve(tfile=None):
     # this is for front end
-    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
+    the_p = Path(app.config['UPLOAD_FOLDER'], "../../frontend/build")
     if tfile:
         return send_from_directory(the_p, tfile)
     else:
@@ -198,7 +198,7 @@ def serve(tfile=None):
 def serve_static(folder=None, lfile=None):
     # this is for front end
     print(folder, lfile)
-    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
+    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build/static"
     print(the_p / folder)
     return send_from_directory(the_p / folder, lfile)
 
