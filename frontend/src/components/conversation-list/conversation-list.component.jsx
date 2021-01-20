@@ -34,6 +34,7 @@ export default function ConversationList() {
 
   return (
     <div className="conversation-list">
+      <div id="close-menu-btn"><i className="ion-ios-close-circle-outline"></i></div>
       {
         <Fragment>
           <Toolbar

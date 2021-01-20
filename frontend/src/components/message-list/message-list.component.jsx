@@ -128,6 +128,7 @@ export default function MessageList(props) {
 
     return(
       <div className="message-list">
+
         {
           currentConversation.name ?
             <Fragment>
@@ -135,8 +136,12 @@ export default function MessageList(props) {
                 title= {`${currentConversation.name}`}
                 rightItems={[
                   <ToolbarButton key="info" icon="ion-ios-information-circle-outline" func={() => dispatch(on('info'))}/>,
-                  //<ToolbarButton key="video" icon="ion-ios-videocam" />,
+                  // <ToolbarButton key="video" icon="ion-ios-videocam" />,
                   //<ToolbarButton key="phone" icon="ion-ios-call" />
+                ]}
+                leftItems={[
+                  //add ".close" class on click
+                  <ToolbarButton key="menu" icon="ion-ios-menu" func={() => dispatch(on('info'))}/>,
                 ]}
               />
 
@@ -144,7 +149,7 @@ export default function MessageList(props) {
 
               <Compose rightItems={[
                 <ToolbarButton key="send" icon="ion-navigate-outline"/>,
-                //<ToolbarButton key="photo" icon="ion-ios-camera" />,
+                // <ToolbarButton key="photo" icon="ion-ios-camera" />,
                 //<ToolbarButton key="image" icon="ion-ios-image" />,
                 //<ToolbarButton key="audio" icon="ion-ios-mic" />,
                 //<ToolbarButton key="money" icon="ion-ios-card" />,
