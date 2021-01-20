@@ -25,7 +25,7 @@ const Header = () => (
                     to="scrollhere"
                     spy={true}
                     smooth={true}
-                    //offset={-70}
+                    offset={10}
                     duration={700}
                 >Start Messaging</Link>
             </div>

@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 import uuid
 
 
-URL = 'http://127.0.0.1:5000'
+URL = 'http://87.236.212.125'
 
 app = Flask(__name__)
 
@@ -180,7 +180,19 @@ def login():
 
 @app.route('/img/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename) # as_attachment=True
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  # as_attachment=True
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    # this is for front end
+    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
+    le_path = the_p / path
+    if path != "" and le_path.exists():
+        return send_from_directory(le_path.parent, le_path.name)
+    else:
+        return send_from_directory(the_p, 'index.html')
 
 
 @app.route('/api/profile', methods=['GET', 'POST'])
@@ -442,4 +454,4 @@ if __name__ == '__main__':
         db.create_all()
     if not Path(app.config['UPLOAD_FOLDER']).exists():
         Path(app.config['UPLOAD_FOLDER']).mkdir()
-    app.run()
+    app.run(use_reloader=True, port=5000, threaded=True)
