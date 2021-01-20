@@ -183,6 +183,17 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename) # as_attachment=True
 
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    # this is for front end
+    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/public"
+    if path != "" and Path.exists(the_p + '/' + path):
+        return send_from_directory(the_p, path)
+    else:
+        return send_from_directory(the_p, 'index.html')
+
+
 @app.route('/api/profile', methods=['GET', 'POST'])
 @token_required
 @cross_origin()
