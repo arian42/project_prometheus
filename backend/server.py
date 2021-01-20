@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 import uuid
 
 
-URL = 'http://127.0.0.1:5000'
+URL = 'http://87.236.212.125'
 
 app = Flask(__name__)
 
@@ -442,4 +442,4 @@ if __name__ == '__main__':
         db.create_all()
     if not Path(app.config['UPLOAD_FOLDER']).exists():
         Path(app.config['UPLOAD_FOLDER']).mkdir()
-    app.run()
+    app.run(use_reloader=True, port=5000, threaded=True)
