@@ -188,7 +188,7 @@ def uploaded_file(filename):
 def serve(path):
     # this is for front end
     the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/public"
-    if path != "" and Path.exists(the_p + '/' + path):
+    if path != "" and Path.exists(the_p / path):
         return send_from_directory(the_p, path)
     else:
         return send_from_directory(the_p, 'index.html')
