@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchChats = createAsyncThunk('chat/fetchChats', async (username, { getState }) => {
     const {token} = getState().user;
     
-    let fetchedChat = await fetch(`http://127.0.0.1:5000/api/chat/${username}`, {
+    let fetchedChat = await fetch(`http://87.236.212.125/api/chat/${username}`, {
         headers: {
             'x-access-token': `${token}`
         },
@@ -22,7 +22,7 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async ({currentC
         "msg": `${message}`,
     }
 
-    fetch(`http://127.0.0.1:5000/api/chat/${currentConversation}`,{
+    fetch(`http://87.236.212.125/api/chat/${currentConversation}`,{
         headers: {
             'x-access-token': `${token}`
         },
@@ -54,7 +54,7 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async ({currentC
 export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, { getState }) => {
     const {token} = getState().user;
 
-    let fetchedChat = await fetch("http://127.0.0.1:5000/api/chats", {
+    let fetchedChat = await fetch("http://87.236.212.125/api/chats", {
         headers: {
             'x-access-token': `${token}`
         },
@@ -68,7 +68,7 @@ export const fetchChatsList = createAsyncThunk('chat/fetchChatsList', async (_, 
 export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
     const {token} = getState().user;
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
+    const fetchedJson = await fetch("http://87.236.212.125/api/search",{
         method: 'POST',
         body: JSON.stringify({
             'username': `${person}`,
