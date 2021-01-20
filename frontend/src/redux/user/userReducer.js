@@ -6,7 +6,7 @@ import {
 
 const signInSignUpProfile = async ({username, token}) => {
 
-    const profileFetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
+    const profileFetchedJson = await fetch("http://87.236.212.125/api/profile",{
         method: 'POST',
         body: JSON.stringify({
             'username': `${username}`,
@@ -20,7 +20,7 @@ const signInSignUpProfile = async ({username, token}) => {
 }
 
 export const signUp = createAsyncThunk('user/signUp', async ({name, username, email, password }) => {
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-up",{
+    const fetchedJson = await fetch("http://87.236.212.125/api/sign-up",{
         method: 'post',
         body: JSON.stringify({
             'name': `${name}`,
@@ -37,7 +37,7 @@ export const signUp = createAsyncThunk('user/signUp', async ({name, username, em
 
 export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, password}) => {
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/sign-in",{
+    const fetchedJson = await fetch("http://87.236.212.125/api/sign-in",{
         method: 'post',
         body: JSON.stringify({
             'usernameOrEmail': `${usernameOrEmail}`,
@@ -53,7 +53,7 @@ export const signIn = createAsyncThunk('user/signIn', async ({usernameOrEmail, p
 export const profile = createAsyncThunk('user/profile', async (_, { getState } ) => {
     const {username,token} = getState().user;
 
-    const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
+    const fetchedJson = await fetch("http://87.236.212.125/api/profile",{
         method: 'GET',
         body: JSON.stringify({
             'username': `${username}`,
@@ -70,7 +70,7 @@ export const profile = createAsyncThunk('user/profile', async (_, { getState } )
 //     const {userSearch, token} = getState().user;
 //     const username = userSearch.username;
 
-//     const fetchedJson = await fetch("http://127.0.0.1:5000/api/profile",{
+//     const fetchedJson = await fetch("http://87.236.212.125/api/profile",{
 //         method: 'POST',
 //         body: JSON.stringify({
 //             'username': `${username}`,
@@ -86,7 +86,7 @@ export const profile = createAsyncThunk('user/profile', async (_, { getState } )
 // export const profileSearch = createAsyncThunk('user/profileSearch', async (person, { getState } ) => {
 //     const {token} = getState().user;
 
-//     const fetchedJson = await fetch("http://127.0.0.1:5000/api/search",{
+//     const fetchedJson = await fetch("http://87.236.212.125/api/search",{
 //         method: 'POST',
 //         body: JSON.stringify({
 //             'username': `${person}`,
