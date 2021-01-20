@@ -180,16 +180,17 @@ def login():
 
 @app.route('/img/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename) # as_attachment=True
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  # as_attachment=True
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
     # this is for front end
-    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/public"
-    if path != "" and Path.exists(the_p / path):
-        return send_from_directory(the_p, path)
+    the_p = app.config['UPLOAD_FOLDER'] / "../../frontend/build"
+    le_path = the_p / path
+    if path != "" and le_path.exists():
+        return send_from_directory(le_path.parent, le_path.name)
     else:
         return send_from_directory(the_p, 'index.html')
 
