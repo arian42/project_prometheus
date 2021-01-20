@@ -184,12 +184,12 @@ def uploaded_file(filename):
 
 
 @app.route('/')
-@app.route('/<tfile>')
-def serve(tfile=None):
+@app.route('/<path:path>')
+def serve(path=None):
     # this is for front end
     the_p = Path(app.config['UPLOAD_FOLDER'], "../../frontend/build")
-    if tfile:
-        return send_from_directory(the_p, tfile)
+    if path and Path(the_p, path).exists():
+        return send_from_directory(the_p, path)
     else:
         return send_from_directory(the_p, 'index.html')
 
