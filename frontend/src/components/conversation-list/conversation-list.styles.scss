@@ -1,4 +1,30 @@
 .conversation-list {
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  .toolbar {
+    .right-items {
+      .ion-ios-add-circle-outline {
+        @media screen and (max-width: 768px) {
+          margin-right: 38px;
+        }
+      }
+    }
+  }
+
+  #close-menu-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 2;
+    display: none;
+    i {
+      font-size: 28px;
+      color: #FF8500;
+    }
+    @media screen and (max-width: 768px) {
+      display: block;
+    }
+  }
 }
